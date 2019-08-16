@@ -1,0 +1,58 @@
+\section{Regression}
+\subsection{Linear}
+\underline{Fits linear line to data using squared loss.} Has closed form.\\
+$f(\x) = \w\cdot \x = w_0 + \w\cdot \x$\\\\
+\textbf{Squared loss}; $L(\w) = \frac{1}{N}\sum_{i=1}^{N}(y_i - \w\cdot \x_i)^2$;\\
+$= \frac{1}{N}(\y-\X\w)^T(\y-\X\w)$\\
+$= \frac{1}{N}[\y^T \y - \w^T \X^T \y - \y^T \X \w + \w^T\X^T\X\w]$\\\\
+\textbf{ERM}\\
+$\frac{\partial L}{\partial \w} = \frac{-2}{N}[\X^T\y - \X^T\X\w] = 0$\\
+$\hat{\w} = (\X^T\X)^{-1}\X^T\y$\\\\
+\textbf{MLE} on Gaussian noise model,\\
+Discriminative, assumption that joint distribution is a function plus some noise, $y=f(\x;\w) + \nu$.\\
+$p(y|\x; \w, \sigma) = \mathcal{N}(y; f(\x;\w),\sigma^2)$\\
+$= \frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(y-f(\x;\w))^2}{2\sigma^2}\right)$\\
+$\hat{\w} = (\X^T\X)^{-1}\X^T\y$\\
+$\hat{\sigma}^2 = (1/N)\sum_{i=1}^{N}(y-f(\x; \w))^2$\\
+This shows us that maximizing log likelihood is always equivalent to minimizing log loss, and maximizing log likelihood under the Gaussian noise model is the same as minimizing squared loss.
+\\\\
+\textbf{MAP} on Gaussian noise model, surprisingly the same as L2 regularization.\\
+$\hat{\w} = (\lambda \textbf{I} + \X^T \X)^{-1}\X^T \y$\\
+\textbf{L2 ridge regularization} by ERM.\\
+$\hat{\w} = \arg\max_{\w}\{\sum_{i=1}^{N}(y_i - \w\cdot\x_i)^2 - \lambda\sum_{j=1}^{d}w_j^2\}$\\\\
+\textbf{L1 lasso regularization}\\
+$\hat{\w} = \arg\max_{\w}\{\sum_{i=1}^{N}(y_i - \w\cdot\x_i)^2 - \lambda\sum_{j=1}^{d}|w_j|\}$\\
+Lasso prefers sparsity. Eliminates smallest norm first.\\\\
+\textbf{Errors uncorrelated with training data}\\
+Errors are from LSQ regression $\hat{w}$ because we are performing ERM, so expected loss is 0.\\
+$\frac{\partial R}{\partial \hat{\w}} = \int_x\int_y (y-\hat{\w}\cdot \x)p(\x,y)d\x dy = 0$\\\\
+\textbf{Best unrestricted predictor}\\
+$f^{*}(\x_0) = E_{p(y|\x)}[y_0|\x_0]$ by chain rule. Since each point is equally likely, we can just minimize the inner conditional wrt $f$.\\\\
+\textbf{Bias-variance}\\
+Let $\overline{\theta} = E[\hat{\theta}]$\\
+$E[(\hat{\theta} - \theta)^2] = E[(\hat{\theta} - \overline{\theta} + \overline{\theta} - \theta)^2]$\\
+$= E[(\hat{\theta} - \overline{\theta})^2] + (\overline{\theta} - \theta)^2 = var + bias^2$\\
+\textbf{Bias} is the approximation error limitation of your hypothesis class. Some bias attributed to noise. \textbf{Variance} is estimation error how far you are from best in class due to finite data. The more you regularize, the more vairance, but the less the bias.
+\subsection{Logistic}
+\underline{Linar 
+classification, use -log p as loss as surr}.\\\\
+$h(x) = sign(w_0 + \w\cdot \x)$\\
+$l(\w) = -\log p(\textbf{Y}|\X; \w)$, $\sigma(w_0 + \w\cdot \x_i) - y_i$\\\\
+Really want to minimize risk from 0/1 loss.\\
+$R(h|\x) = \sum_{c=1}^{C}L_{0/1}(h(\x),c)p(y=c|\x)$\\
+$= 1-p(y=h(\x)|\x)$\\
+Model the log odds ratio,\\
+$h(\x) = c^* \textrm{ iff } \log \frac{p(y=c^*|\x)}{p(y=c|\x)} = w_0 + \w\cdot \x = 0$\\
+$p(y=1|\x) = \frac{1}{1+\exp(-w_0 - \w\cdot \x)} = \sigma(w_0 + \w\cdot \x)$\\
+$\log p(\textbf{Y}|\X) = \log \prod_{i=1}^{N} \sigma^{y_i}(1-\sigma)^{1-y_i}$\\\\
+\textbf{Softmax}\\
+\underline{Multiclass classification.}\\
+$p(y=c|x) = \frac{\exp(\w_c\cdot \x - a)}{\sum_{k=1}^{C}\exp(\w_k\cdot \x - a)}$\\
+Minus a for overflow, since posterior is invariant to shifting scores. E.g. let $a$ be the max score.
+\subsection{Misc}
+\textbf{GD for linear}:\\
+$\w' = \w - \eta (\y-f(\X;\w))$\\
+\textbf{GD for logistic}:\\
+$\w' = \w - \eta(\sum_{i=1}^{N}(\sigma(w_0 + \w\cdot\x_i) - y_i))[1, \x_i]^T$\\
+\textbf{Feature maps}\\
+Still linear, but in a higher dimension. $\phi(\x)$. Exponential compleixity though.

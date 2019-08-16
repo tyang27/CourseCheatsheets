@@ -1,0 +1,13 @@
+\section{Misc.}
+Assumption that train and test $x,y$ drawn iid from joint probability $p(x,y)$.\\
+\textbf{Loss}: $l: \mathcal{Y}, \mathcal{Y} \to \mathbb{R}$\\
+\textbf{Risk}: $E_{(\x_0,y_0)\sim p(\x,y)}[l(f(\x_0; \w), y_0)]$\\
+\textbf{Bayes Risk}:
+$f^*  = \arg\min_{f:\mathcal{X}\to \mathbb{R}} R(f)$\\
+\textbf{ERM} assumes that training set is representative of the underlying distribution, so the empirical loss serves as a proxy for the risk.\\
+$\hat{f} = \arg\min_f l(y, f(\x))$\\
+\textbf{Generative approach} normalizes $p(\x,y)$ using Bayes to get $p(y|\x)$.\\
+$p(y|\x) = p(\x|y)p(y)/p(\x)$ post = likelihood * prior\\
+\textbf{Discriminative approach} estimates $p(y|\x)$ directly from the data. MLE and MAP. MLE performs point estimation on the highest likelihood parameters. MAP uses some belief about parameter before seeing data.\\
+$MLE = \max \log [p(y|\x; \theta)]$\\
+$MAP = \max \log [p(y|\x, \theta)p(\theta)]$

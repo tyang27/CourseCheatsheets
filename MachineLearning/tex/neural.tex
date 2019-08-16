@@ -1,0 +1,26 @@
+\section{Neural}
+\subsection{Perceptron}
+Mistake-driven classification algorithm.\\
+\textbf{Perceptron loss}: $\begin{cases}
+0 &  y_i(\w\cdot\x_i) > 0\\
+y_i\x_i & \textrm{else}
+\end{cases}$\\
+Assume linearly separable or else will not stop.
+$\w = \sum_{i=1}^{M}\alpha_{m(i)}\x_{i(m)}$ where $\alpha_{m(i)}$ is 0 or $y_i$ and $i(m)$ is the index of example used in the $m$th iteration.
+\subsection{Neural}
+\underline{Nested functions}, backpropagation to perform gradient descent and assign blame from loss.
+$\hat{y}(\x; \w) = f(\sum_{j=1}^{m}w_j^{2}h(\sum_{i=1}^{d}w_{ij}^{1} + w_{0j}^{1}) + w_0^2)$\\
+\textbf{You define your loss}, e.g. squared loss,\\
+\textbf{Setup}: $j \in J$ feeding into $t$, $t$ feeding into $s \in S$, $r$ also feeding into $S$.\\
+$z_t = h(a_t) = h(\sum_{j} w_{jt}z_j)$\\
+$z_s = h^*(a_s) = h^*(\sum_{r}w_{rs}h(a_r))$\\
+aka $a_t = \sum_{j} w_{jt}z_j$ and $a_s = \sum_{r}w_{rs}h(a_r)$\\\\
+$\delta_t = \frac{\partial L}{\partial a_{t}} = \sum_{s} \frac{\partial L}{ \partial a_s}\frac{\partial a_s}{ \partial a_t} = \sum_{s} \delta_s(w_{ts}h'(a_t))$\\
+$\partial a_t / \partial w_jt = z_j$\\
+The blame placed on $a_t$ is the sum of losses from nodes it outputs to weighted by its contribution and how much it can change. $a_t$ distributes this loss to its incoming weights, which is dependent on the strength of the input.\\
+$\frac{\partial L(\hat{y}, y)}{\partial w_{jt}} = \frac{\partial L}{\partial a_t} \frac{\partial a_t}{\partial w_{jt}} = \delta_t z_j = [\sum_{s} \frac{\partial L}{\partial s}(w_{ts}h'(a_t)) ]z_j$\\\\
+Regularization: 
+weight decay (L2 reg), early stopping.\\
+Stability of GD: Apply momentum by weighting the previous weight. $\Delta \w_t = \mu \Delta \w_{t+1} - \eta_t \nabla_w J$\\
+Vanishing gradient due to saturating nonlinearity: ReLU $max(0, a)$\\
+Co-adaptation aka upper levels learn the same things: use dropout to randomly remove units.

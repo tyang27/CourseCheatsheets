@@ -1,0 +1,24 @@
+\section{SVM}
+\underline{Maximizes margin in classification, hinge loss.} If not specified, constraints hold $\forall i=1,\dots, N$.\\
+Distance to boundary: $y(\w\cdot \x + w_0)/||\w||$\\
+Maximize margin/maximize distance to closest point: $\arg \max_{\w, w_0} \min_i \{distance_i\}$\\
+Assume separable, $ls = y_i(w_0 + \w\cdot \x_i) - 1 \geq 0$\\\\
+$\hat{y} = sign(\hat{w_0} + \sum_{\alpha_i > 0} \alpha_iy_i\x_i\cdot \x)$\\\\\
+\textbf{Primal}: $\min_{\w}\frac{1}{2}||\w||^2$ s.t. $ls$\\
+$= \min_{\w} \frac{1}{2}||\w||^2 + \sum \max_{\alpha_i \geq 0} \alpha_i[1-y_i(w_0 + \w\cdot \x_i)]$\\
+$= \max_{\alpha \geq 0} \min_{\w} \frac{1}{2}||\w||^2 + \sum  \alpha_i[1-y_i(w_0 + \w\cdot \x_i)]$
+Distance preserved by scaling weight and bias because the norm will be scaled by the same amount, set min distance to 1. $||\w||$ is largest when $||\w||^2$ is smallest.  Introduce a lagrange multiplier to convert the constraint to a loss, infinity if violated, else 0. To max, if point is further away (distance < 0), $\alpha_i = 0$, else not a ls predictor. Use KKT and strong duality (convex and affine) to get maxmin. Minimizing wrt $\w$ and $w_0$,
+$\w = \sum \alpha_i y_i \x_i$ and $0 = \sum \alpha_i y_i$. But $\alpha_i>0$ only if you are a support vector, so $\hat{w}= \sum_{\alpha_i > 0} \alpha_iy_i\x_i$.\\
+\textbf{Dual}: $\max\{\sum_i^N \alpha_i - \frac{1}{2}\sum_{i,j}^{N} \alpha_i \alpha_j y_i y_j K(\x_i, \x_j)\}$ s.t. $\sum \alpha_iy_i = 0, 0\leq \alpha_i$\\\\
+For nonseparable, $ls$ assumption violated, so cap our cost to $C$. Introduce slack variable $\xi_i$ that is the hinge loss.\\
+\textbf{Hinge loss:} $\max\{0, 1-y_i(w_0 + \w\cdot \x_i)\}$.\\
+\textbf{Primal}: $\min_{\w}\frac{1}{2}||\w||^2 + C\sum \xi_i$\\
+\textbf{Dual}: $\max\{\sum_i^N \alpha_i - \frac{1}{2}\sum_{i,j}^{N} \alpha_i \alpha_j y_i y_j K(\x_i, \x_j)\}$ s.t. $\sum \alpha_iy_i = 0, 0\leq \alpha_i \leq C$\\\\
+\textbf{Kernel trick:}
+Basically applied when dot product is present because it measure similarity. Kernel must be continuous, symmetric, and positive definite.\\
+\underline{RBF}: $K(\x, \textrm{\textbf{z}}; \sigma) = \exp(-||\x-\textrm{\textbf{z}}||^2/\sigma^2)$\\
+$\sigma$ controls spread; if 0, then all points become support vectors.\\\\
+\textbf{SVM for regression}\\
+$y_i \leq f(\x_i) + \epsilon + \xi_i$ and $y_i \leq f(\x_i) - \epsilon - \xi'_i$\\
+$\min C\sum_i (\xi_i + \xi'_i) + \frac{1}{2}||\w||^2$\\
+Anything within $\epsilon$ is okay, but penalize with hinge loss after that.

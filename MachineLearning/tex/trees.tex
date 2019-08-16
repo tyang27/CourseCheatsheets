@@ -1,0 +1,17 @@
+\section{Trees}
+\textbf{Regression}\\
+$f(\x) = \sum_{m=1}^{M}f_m I_{x\in R_m}$, $~f_m = \sum_{pt\in R_m}y_i / N_m$\\\\
+Want to minimize squared loss. 
+Not computationally tractable, so do a greedy splitting algorithm. Use split $s$ to divide left and right, then our cost is,\\
+$\min_{f_L} \sum_{pt \in R_L}(y_i - f_L)^2 + \min_{f_U}\sum_{pt \in R_U}(y_i - f_R)^2$\\\\
+Easily overfits. Bad idea to split if gain is small if $-\_-$ data. Use pruning instead.\\
+$C(T; \lambda) = \sum_{m=1}^{|T|}N_m Q_m(T) + \lambda|T|$\\
+Where Q is the leaf error and lambda decides if the region is worth it.\\\\
+\textbf{Classification}\\
+Similar idea, want to minimize 0/1 loss per leaf.\\
+$\hat{y} = \arg\max_c \hat{p}_{m,c}$, $~\hat{p}_{m,c} = I_{x\in R_m}/N_m$\\
+$Q_m(T) = \sum_{c=1}^{C}\hat{p}_{m,c}(1-\hat{p}_{m,c})$
+\subsection{Boosting}
+\underline{Ensemble by summing low variance, high bias} (shallow, underfitting). $\pm1$ if $x_j$ is above or below a threshold. Complexity depends on number of classifiers and complexity of classifiers. Basically, for each stump and class, we add up the scores for the class for the leafs that the data point goes to in the trees.
+\subsection{Bagging/random forests}
+\underline{Ensemble by averaging high variance, low bias} (deep, overfitting). Use bootstrapping and sampling to introduce randomness and make trees look different. \textbf{Bootstrapping} samples $N$ points with replacement. \textbf{Sample features} by only consider splits along a subset of features. Grow a bunch of trees. To make a prediction, either take the average or vote. Tune on the number of trees or the feature set size, tree depth/leaves.

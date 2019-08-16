@@ -1,0 +1,30 @@
+\section{Boosting}
+\subsection{Ada}
+\underline{Greedy algorithm for combining weak classifiers}.
+\underline{using exponential loss as surr}.\\
+We can also view it as a greedy algorithm for fitting $\alpha$ under the sparsity constraint $||\alpha||_0 \leq M$.\\\\
+$H(\x) = \alpha_1 h_1 (\x) + ... + \alpha_m h_m(\x)$\\ $\hat{h}(\x) = sign(H(\x))$\\\\
+\textbf{Algorithm}: Each point equal weight $W_{i}^{(0)} = 1/N$; % At the beginning, each point gets equal weight
+For $M$ iterations;
+Fit $h'$ with error weighted by $W_i$ s.t. 0/1 loss $\epsilon' < 1/2$ so that $\alpha' > 0$; % e.g. using logistic regression.
+Snuggness of hypothesis $\alpha' = \frac{1}{2}\log \frac{1-\epsilon'}{\epsilon'}$; % This represents goodness of function.
+Update weight with normed exp loss $\W_{i}' = \W_{i} e^{-\alpha'y_ih'(\x_i)}/\sum_{j}\W_j'$.\\\\
+$\alpha'$ is the vote for a function is -- big alpha for small error. $W'$ represents a distribution of who is angriest with the current predictor. $y_ih'(\x_i)$ will be 1 if they agree and $-1$ if they disagree, so will push the weights/contentness in one way or the other.\\\\
+\textbf{Exponential loss}\\
+$L(H(\X), \y) = \sum_{i=1}^{N}e^{-y_iH(\x_i)}$\\
+$= \sum e^{-y_iH(\x_i)} e^{-\alpha' y_i h'(\x_i)}$\\
+$= \sum \W_{i}e^{-\alpha' y_i h'(\x_i)}$\\
+$= e^{-\alpha'}\sum_{y_i \neq h'(\x_i)} \W_i + e^{\alpha'}\sum_{y_i = h'(\x_i)} \W_i$\\\\
+We get $\alpha'$ by minimizing loss.\\
+$\frac{\partial L}{\partial a_t} = -e^{-\alpha'}\sum_{y_i \neq h'(\x_i)} \W_i + e^{\alpha'}\sum_{y_i = h'(\x_i)} \W_i = 0$\\
+$e^{-\alpha'}(1-\epsilon) = e^{\alpha'}\epsilon$\\
+$\alpha' = \frac{1}{2}\log \frac{1-\epsilon}{\epsilon}$\\\\
+0/1 loss; $\epsilon' = \sum_{y_i \neq h'(\x_i)}\W_i$\\\\
+Exponential loss is an upper bound for 0/1 loss, is differentiable. Train error of $H$ goes down, $\epsilon'$ goes up, $\alpha'$ goes down, exponential loss goes strictly down. Even after training, test error can go down. This is because it increases the margin of training examples. $\gamma(\x_i) = y_i \frac{H'(\x)}{\sum_i \alpha_i}$\\
+% https://github.com/jaimeps/adaboost-implementation/blob/master/adaboost.py
+
+\subsection{Gradient}
+Fit to the gradients or residuals of the current model. The gradient of squared loss is the residual.\\
+$\hat{y}(\x) = F_M(\x) = f_1(\x) + ... + f_m(\x)$\\\\
+\textbf{Algorithm}: $F_1(\x) = \frac{1}{N}\sum_i y_i$; For $M$ iterations; $F'(\X) = F(\X) + f'(\X) = F(\X) - fit(y_i - F(\X))$ since residuals are negative gradients of loss.\\\\
+Works for nonlinear data with high bias but low variance. Yeah NGL kinda lost on this.

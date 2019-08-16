@@ -1,0 +1,310 @@
+\section{Complexity}
+\begin{itemize}
+    \item $O(f(n))$: $T(n) \leq cf(n)$
+    \item $\Omega(f(n))$: $T(n) \geq cf(n)$
+    \item $\Theta(f(n))$: $T(n) = O(f(n))$ and $T(n) = \Omega(f(n))$
+\end{itemize}
+\subsection{Summations using integral approximation}
+Taking integrals gives you a lower and upper bound. If divide by 0 error, take out the first value from the summation.
+$$\int_{0}^{n} di \leq \sum_{i=1}^{n} \leq \int_{1}^{n+1} di$$
+\subsection{Tips and tricks}
+\begin{itemize}
+    \item log both sides
+    \item $\log_ab = \log b / \log a$
+    \item $\log {ab} = \log a * \log b$
+    \item $n^{a} * n^{b} = n^{a+b}$
+\end{itemize}
+
+
+\section{Recurrences}
+
+\subsection{Induction}
+\begin{itemize}
+    \item Base case: $T(1) = c$
+    \item Induction hypothesis: $T(n) = O(f(k))$ for $k<n$
+    \item Induction step:
+    $$T(n)\leq cf(k)$$
+\end{itemize}
+
+\subsection{Master's}
+\begin{itemize}
+    \item Format: $T(n) = aT(n/b) + cn^k$ and $T(1) = c$
+    \item Conditions: $a\geq 1$, $b>1$, $c>0$, $k\geq 0$
+    \item $T(n) = \Theta(n^k)$ if $a < b^k$
+    \item $T(n) = \Theta(n^k\log(n))$ if $a = b^k$
+    \item $T(n) = \Theta(n^{\log_b(a)})$ if $a > b^k$
+\end{itemize}
+
+\subsection{Tree method}
+Work done at each level of the tree times number of leaves.
+$$T(n) = aT(n/b) + cT(n/d) + f(n)$$
+If $\frac{a}{b} + \frac{c}{d} < 1$, try $\Theta(f(n))$. Else if it equals 1, try $\Theta(n\log n)$.
+
+\subsection{Unrolling}
+Substitute $T(an-b)$ into $T(n)$, until you can generalize to $i$ iterations. $T(X)$ to the base case, so $T(X)=0$ and $X=1$ or whatever is convenient. Plug the number of iterations back in.
+
+\section{Characteristic root}
+$$T(n) = T(n-1) + T(n-2)$$
+Let $T(n) = c^n$.
+Exponentiate, rewrite as polynomial, and divide by the lowest degree,
+$$c^n = c^{n-1} + c^{n-2}$$
+$$c^n - c^{n-1} - c^{n-2} = 0$$
+$$c^2 - c - 1 = 0$$
+Using the roots, solve systems of equations to get coefficients or simply take the highest value,
+$$T(i) = ar_1^i + br_2^i + \dots$$
+Then,
+$$T(n) = ar_1^n + br_2^n + \dots$$
+
+
+
+
+\section{Algorithms}
+\subsection{Divide and conquer}
+\subsubsection{Integer multiplication}
+\subsubsection{Matrix multiplication}
+\subsubsection{K-th order statistics using median of medians}
+\begin{itemize}
+    \item Divide the data into $n/k$ groups of $k$ elements. 
+    \item Find the medians of the $n/k$ groups by comparing each one with each other in $k$ choose $2$ steps. Find the median of medians by recursing $T(n/k)$.
+    \item Separate groups as higher or lower than median of medians in $n$. 
+    \item Recurse on the worst case, which is a portion $p$ of the $n/k$ full groups of $k$, and another portion $1-p$ of the $n/k$ partial groups of $k/2$.
+\end{itemize}
+
+    $$T(n) = \frac{n}{k} \binom{k}{2} +   T\left(\frac{n}{k}\right) + n + T\left(k \left[p * \frac{n}{k}\right]+ \frac{k}{2}\left[(1-p) * \frac{n}{k}\right]\right)$$
+    
+\subsection{Towers of Hanoi}
+Move $n-1$ off recursively, then move the bottom one, then move the $n-1$ back.
+$$T(n) = 2T(n-1) + 1$$
+    
+\section{Sorting}
+\subsection{Sorting lower bound}
+Assume $n$ distinct items. Then there are $n!$ permutations of these $n$ data. We compare elements based on two possibilities/branches, the first element is greater or the second is. Then, $2^d \geq n!$ and we can solve for $d$. Using Stirling, $d \geq \log n! \geq n\log n$.
+
+\subsection{Stability of sorting}
+Stable if equal elements in input array stay in the same order of the sorted array.
+
+\subsection{Count sort - $O(n)$}
+Sort into buckets.
+
+\subsection{Radix sort}
+Sort the last column, then left one, until you run out of columns. $O(nk)$.
+
+
+\section{Dynamic Programming}
+\begin{itemize}
+    \item Algorithm takes exponential time and we want polynomial
+    \item Algorithm has optimal substructure and repeating function calls. Meaning that answer is deterministic, same input will always give you the same output.
+    \item Generally, define your subproblem's output, and what other output it depends on. Then, specify how to fill in the table.
+\end{itemize}
+\subsection{Matrix chain product}
+Dp calculates operations from $i$ to $j$, testing each split $k$. While growing your window between $i,j$,
+$$c_{i,j} = \min_{i\geq k\geq j} \{m_{i,k} + m_{k+1,j} + p_{i-1} p_{k} p_{j}\}$$
+
+\subsection{Longest common subsequence}
+Dp calculates the longest common substring from $i$ to $j$.
+$$c_{i,j} = \max\begin{cases}
+c_{i-1, j}\\
+c_{i, j-1}\\
+1+c_{i-1, j-1} & x_i=y_j
+\end{cases}$$
+
+\subsection{Longest increasing subsequence}
+Do calculates the longest increasing subsequence from the beginning of the string to $j$.
+$$c_{j} = \max_{0\leq i < j}\begin{cases}
+c_{i} + 1 & x_i < x_j\\
+1
+\end{cases}$$
+
+\section{Data structures}
+\subsection{Heaps}
+\begin{itemize}
+    \item Property: Parent is larger than children
+    \item Op: Heapify - convert array to tree, go left and up, bubbling parents down. Maintain loop invariant on subtrees. $O(\log n)$
+    \item Op: Insert - insert node to maintain complete tree, then bubble up $O(\log n)$
+    \item Op: Delete - swap with root, bubble new root down $O(\log n)$
+    \item Op: Peek - look at root $O(1)$
+\end{itemize}
+
+\subsection{Red black trees}
+\begin{itemize}
+    \item Property: Every node either black or red.
+    \item Property: Root and NIL leafs are black.
+    \item Property: If a node is red, then both its children are black.
+    \item Property: All simple paths below a node contain the same \# of blacks.
+    \item Property: Max height is alternating reds and blacks $2\log n + 1$.
+    \item Op: Insertion - go down binary search tree, insert as red. If parent is black, no problems. If parent is red, check uncle. If uncle is red, recolor (parent, uncle, gradnaprent), and recurse up to fix properties. If uncle is black, either do single or double rotation.
+    \item Op: Deletion - go down binary search tree to find the node to delete and the node closest in value that can replace it, if replacement is red, or the removed node is red, black height property not violated, so just set the node to black. If replacement and removal nodes are black, set replacement to double black, which is worth two heights.
+    \item Subop: Fix double black - if double black is root, change it to black. If double black's sibling is black and at least one nephew is red, rotate the sibling into the doubly black node. This may be a single or double rotation. If the sibling is black and both nephew are black, recolor the sibling, and give the double black problem to the parent. If sibling is red, rotate subtree into double black, and set it to red. Then, use the other case.
+    \item Augment: Can keep track of size of a subtree by doing $node.size = left.size + right.size + 1$.
+\end{itemize}
+\subsection{Hashing}
+\subsubsection{Static}
+\begin{itemize}
+    \item The idea of a static dictionary is that we know how many elements are in our universe beforehand and what they are. We can search in $O(1)$, but we cannot insert.
+    \item A set of functions $G$ is 2-universal if the size of the set of functions that collide on distinct $x$ and $y$ into an array of $R$ is $\leq |G|/r$.
+    \item We can use this idea to create 2 layer hash table. Even though we use $m^2$ space for each secondary hash table, this is is surprisingly $O(n)$ space.
+    \item First layer uses a hash function that maps elements to $r$ bins. Then, another layer of $r$ hash functions that map values into a secondary hash table of $m^2$. This only works because we know how many things will map into each index of the first layer.
+\end{itemize}
+\subsubsection{Dynamic dictionary}
+\begin{itemize}
+    \item Different from static hashing, since we can insert. 
+    \item Linear probing is the simplest.
+\end{itemize}
+
+\section{Techniques}
+\subsection{Probability}
+$$E(X) = \sum_{x \in X}x*p(x)$$
+Useful for quick sort analysis and randomized algorithms.
+\subsection{Amortization}
+$$steps + potential < k * operations$$
+An operation is sort of like a function call, whereas steps are the number of moves/cost related to the operation. Potential is user-defined and represents the highest possible number of steps after a move. The idea is that we use potential to soften the blow of a sudden jump in cost. We look at change in potential to prove complexity.
+\subsection{Greedy}
+\begin{itemize}
+    \item Take the locally optimal choice
+    \item May not necessarily be optimal, e.g. in superstring problem, given a list of substrings, maximizing overlap between the substrings does not allow you to find the shortest superstring that contains all the substrings.
+\end{itemize}
+\subsubsection{Huffman}
+\begin{itemize}
+    \item Goal is to encode a message with the smallest number of bits, given the frequencies of symbols.
+    \item Combine the two smallest frequencies. Create a new node that represents the two that is the sum of the joined nodes.
+\end{itemize}
+
+\section{Union Find}
+\begin{itemize}
+    \item Represents disjoint sets
+    \item Two operations -- union, and find.
+    \item To find, naive approach is to have a pointer from each node to a parent that represents the set.
+    \item To union, naive approach is to append one list to another. Complexity will be the number of nodes with parent pointers changed.
+    \item Weighted-union heuristic - Append shorter depth set to the larger depth set. The lower bound remains the same, but on an aggregate sequence of operations, $O(m+n\log n)$, since for a pointer to change, it must be part of the smaller set, so the number of changes required grows in powers of 2.
+    \item Union by rank - similar to weighted-union heuristic, but using rank. Rather than using size, we can use an upper bound on height before compression.
+    \item Prop: If rank is $r$, then at least $2^r$ vertices by induction, so the $r \leq \log n$.
+    \item Path compression - in a find, we go up normally up to the representative. Then, on tail recursion, update all nodes to point to the representative, so that future lookups will be faster.
+\end{itemize}
+\subsection{Applications}
+\begin{itemize}
+    \item Offline minimum - we have inserts and extract min before the algorithm even starts, and we want to see what the mins would be. We basically create a bunch of disjoint sets. Then, iterate through the values from smallest to largest. Use the union find representatives to figure out where the closest extract-min is.
+    \item Connected components of a graph
+\end{itemize}
+\section{Graphs}
+\begin{itemize}
+    \item Directed graph (digraph)
+    \item $m$ edges
+    \item $n$ vertices
+    \item Undirected graph iff $(i,j) \in E \implies (j, i \in E)$
+\end{itemize}
+\subsubsection{DFS - $O(n+m)$}
+\begin{itemize}
+    \item Algorithm not described.
+    \item Tree edge - When we visit a node for the first time, the edge we arrived on is a tree edge.
+    \item Back edge - If $v$ has been visited, and $v$ is an ancestor of $u$, then $(u,v)$ is a back edge and represents a loop.
+    \item Forward edge - If $v$ has been visited, and $v$ is a descendent of u, $(u, v)$ is a forward edge. This represents two paths running into each other.
+    \item Cross edge - If $v$ has been visited, and $v$ is neither an ancestor or descendent of $u$, the $(u,v)$ is a cross edge. This represents a connection to another part of the graph.
+    \item Cyclic - cyclic iff DFS of G has a back edge, since cyclic means that $\exists u, v$ s.t. $u\leadsto v$, $v\leadsto u$.
+\end{itemize}
+\subsubsection{Topological sort - $O(n+m)$}
+\begin{itemize}
+    \item Assumes acyclic graph.
+    \item Do a DFS on G. List out vertices from right to left based on last visit basis.
+    \item This is useful because we can tell which nodes have no incoming edges, and which ones have no outgoing edges. It also tell us about dependencies.
+\end{itemize}
+\subsubsection{Strongly connected}
+\begin{itemize}
+    \item Two vertices are strongly connected iff $\exists u, v$ s.t. $u\leadsto v$, $v\leadsto u$
+    \item Graph is strongly connected if all pairs of vertices are strongly connected.
+    \item To find SCC, do DFS and remember the last visit times. Highlight the edges that go from larger last visit time to smaller. Then, find the transpose of the graph by reversing the edges. Perform a DFS on the transpose, starting with the largest finish times to smallest. Highlight the edges that go from larger finish time to smaller. If highlighted in both, then there must be a cycle, so we have a SCC.
+\end{itemize}
+\subsubsection{BFS}
+\begin{itemize}
+    \item Algorithm not described.
+\end{itemize}
+\subsection{Single source shortest paths}
+\subsubsection{Dijkstra - $O((m+n)\log n)$}
+\begin{itemize}
+    \item Assume positive weights.
+    \item Create a priority queue of closest neighbors. For the next closest neighbor $u$, can we reach $u$'s neighbors $v$ faster by going through $u$?
+    \item By triangle inequality, we can construct a dp algorithm. $O(m\log n)$
+    \item Correctness by loop invariant.
+\end{itemize}
+\subsubsection{Bellman-Ford - $O(nm)$}
+\begin{itemize}
+    \item No assumption on the weights.
+    \item $N-1$ relaxations over every edge. If we can reach a nodes $u,v$ in $d_u$ and $d_v$, can we get to $v$ faster by going through $(u,v)$?
+    \item If $N$th iteration continues to relax the weight, must be a negative cycle.
+    \item This algorithm generalizes to all-pairs in Floyd-Warshall.
+\end{itemize}
+\subsection{All pairs shortest path, three ways}
+\subsubsection{Single source $n$ times - $O(n((m + n)\log n))$}
+\subsubsection{Matrix multiplication - $O(n^3)$}
+\begin{itemize}
+    \item Try all paths of k length, up to N.
+    \item For each index $(u,v)$, loop through intermediate node $x$ and see if you can do $u\to x\to v$ faster than current $u\to v$.
+\end{itemize}
+\subsubsection{Floyd-Warshall - $O(n^3)$}
+\begin{itemize}
+    \item N-1 relaxations, through one node $x$ at a time.
+    \item For each intermediate node $x$, loop through indices $(u,v)$ and see if you can do $u\to x\to v$ faster than current $u\to v$.
+\end{itemize}
+
+\subsection{Max flow}
+\begin{itemize}
+    \item Given a source $s$ and a sink $t$, and a capacity of each edge $cap(e)$, we would like to maximize the flow/production/$|f|$ from source to sink. $$|f| = \textrm{out of source} - \textrm{ into source} = \sum_{v\in V}f(s,u) - \sum_{v\in V}f(v,s)$$
+    \item Property: The flow is bounded by 0 and the capacity. $$0 \leq flow(e) \leq capacity(e)$$
+    \item Property: At any vertex except the source and sink, flow is conserved, so that you can only flow out as much as you flow in. $\forall u \in V - \{s,t\}$, $$\sum_{v\in V} f(v,u) = \sum_{v\in V}f(u,v)$$
+
+    \item Residual graph - some edges represent capacity left, some edges represent capacity used up, indicating production.
+    \item Property: At most double the number of edges going from a flow graph to residual graph
+    \item Property: An augmentation of a flow by $\Delta$ obeys flow properties.
+    \item Augmenting path - we augment all edges in a path, restricted by the bottleneck, the smallest edge.
+    \item Partition the vertices into $S,T$ and look at all the flows going from $S\to T$ minus the flows going from $T\to S$. The cut will represent production/flow through the cut and will be bounded by the capacity.
+    $$|f| = f(S,T) = \sum_{u\in S}\sum_{v\in T}f(u,v) - \sum_{u\in S}\sum_{v\in T}f(v,u) \leq cap(S,T)$$
+    \item Max flow min cut: 1) $f$ is a max flow in $G$ 2) no augmenting paths 3) $|f| = c(S,T)$
+    \item Max flow min cut makes intuitive sense because the goal is to send as much flow through the network as possible, but this is limited by the smallest link. If you augment by the smallest link, then you maximize the amount that leftovers the other links can still send.
+\end{itemize}
+\subsubsection{Ford-Fulkerson}
+\begin{itemize}
+    \item Start with no flow from source to sink.
+    \item While there is an augmenting path capacity edge, find the min cut, and augment the flow by increasing the weight going towards the source and decreasing thew eight going towards the sink.
+\end{itemize}
+\subsubsection{Edmond Karp - $O(nm^2)$}
+\begin{itemize}
+    \item Ford-Fulkerson may take too long, if you choose bad augmenting paths.
+    \item Ford-Fulkerson, but rather than randomly choosing an augmenting path, choose the smallest edge in the shortest path.
+\end{itemize}
+
+\section{P and NP}
+\begin{itemize}
+    \item P if there exists a polynomial time algorithm
+    \item NP if there exists a polynomial verification algorithm or nondeterministic polynomial algorithm, $P \subseteq NP$
+    \item NP complete if NP (by construction) and as hard as any other problem in NP (by reduction)
+    \item $A\leq_p B$ - there exists a polynomial time mapping reduction from $A$ to $B$ such that 1) given an input in $A$, you can 2) transform it into an input in $B$ such that 3) $B$ gives the same answer as $A$. that is, if $x \in A, f(x) \in B$ and if $x \notin A, f(x) \notin B$ (or if $f(x) \in B, x \in A$)
+    \item $A$ no harder than $B$, so if you know that B is in P, then $A$ must also be in P.
+    \item $B$ no easier than $A$, so if you know that $A$ is NP, then $B$ must also be NP.
+    \item Reductions are transitive, so showing that one algorithm from NP is in P brings a lot more into P.
+\end{itemize}
+\subsection{SAT problem}
+\begin{itemize}
+    \item Given a boolean expression, can it be satisfied? In other words, does there exist an input such that the overall output is true?
+    \item Circuit-SAT is NP complete by comparing it to a general problem in NP-complete
+    \item SAT is NP-complete because we can reduce Circuit-SAT to it. The intuition is to create a new variable for each gate. Then, this is basically the boolean logic version of Circuit-SAT, so it must also be NP-complete
+    \item 3SAT is NP-complete because we can reduce SAT to it. The intuition is to create a new "hidden" variable for each logical operator, similar to what we did above, such that the new variable is true iff its inputs are true. Because this is a parse tree, we know that there can be at most two inputs, so two inputs plus another "hidden" variable is at most three inputs. If unary operation or not enough inputs to make 3, just add a dummy variable such that whatever it is, the output is still logically equivalent. This construction is correct because it satisfies 3SAT, and is logically equivalent to SAT.
+\end{itemize}
+\subsection{k-clique problem}
+\begin{itemize}
+    \item Does there exist a $k$-clique in a graph?
+    \item NP - given a set of vertices and a graph, you can check the number of vertices, that each vertex and edge exists and is valid
+    \item $SAT \leq_{p} kclique$
+    \item NP hard - construct a graph, where each clause forms a disjoint, unconnected set of nodes, choose one node from each clause to color. The only ones you cannot choose are the complement, since $A$ and $\overline{A}$ cannot be true at the same time. If these colored nodes form a k-clique, then we know that this is satisfied. However, we know that SAT is NP-complete, so k-clique must also be NP-complete
+\end{itemize}
+\subsection{Vertex cover}
+\begin{itemize}
+    \item A vertex cover is a subset of vertices from a graph such that it is connected to all the edges in the graph. The vertex cover problem is finding the minimum vertex cover, the fewest nodes required.
+    \item NP - just check if all edges can be covered
+    \item NP hard - We can reduce clique to vertex cover, since the vertex cover of the complement of a graph tells you which nodes are not connected to everyone else in the clique.
+\end{itemize}
+\subsection{Hamiltonian cycle problem}
+\begin{itemize}
+    \item Hamiltonian simple is a simple cycle going through every vertex
+    \item NP - given a list of vertices, we can check that $(v_i, v_{i+1}) \in E$, ${v_1, v_n} \in E$. In addition, $v_1,\dots, v_n$ are distinct, where $n$ is the number of vertices
+    \item NP hard - NTS, $vertex cover \leq_{p} hamiltonian cycle$. That is, every input from
+    \item Given a generic graph $G$, we can construct another graph $G'$, such that $G$ has a hamiltonian cycle iff $G'$ has a vertex cover.
+\end{itemize}

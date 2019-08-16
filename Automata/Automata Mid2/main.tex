@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage[margin=0.8in]{geometry}
+
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usetikzlibrary{arrows,automata}
+
+\usepackage{graphicx}
+
+\title{Automata Midterm 2}
+\author{tyang27 }
+\date{March 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Context-free languages}
+\subsection{Pumping lemma for context-free languages}
+If $A$ is a context-free language, then $\exists p$, the pumping length. If $s$ is a long string in A ($s \in A$ and $|s| > p$), then $s$ may be divided into five pieces $s=uvxyz$ s.t.
+\begin{itemize}
+    \item $\forall i \geq 0,uv^i xy^i z \in A$
+    \item $|vy|>0$ (note, $v$ or $y$ can be the empty string, but not both)
+    \item $|vxy| \leq p$
+\end{itemize}
+If a string of terminals is longer than the number of rules in Chomsky Normal form (informally), we know that a variable is repeated, and we can replace the variable inside with the one outside recursively. Pumping once, we get $uvvxyyz$.
+
+\subsection{Showing nonCFLarity}
+Assume, FSOC, that $A$ is a CFL. Let $p$ be the pumping length given by PL for CFLs. Consider a string $s=uvxyz$ (e.g. $s=a^p b^p c^p \in A$) with at least length $p$. State some property about what $v$ and $y$ could be (e.g. we know that $xyz$ cannot contain more than two different types of symbols). Pump up, so the number of occurrences of at least one of the symbols is not changing, meaning that the number of occurrences of one type of symbol is still $p$, while the number of occurences of the other symbol is now $p+k$ for some $k$.
+
+\subsection{Closure}
+\begin{itemize}
+    \item Regular operators: union, concatenation, kleene star, intersection, complement
+    \item Context free operators: union, concatenation, kleene star
+    \item Turing decidable: union, intersection, concatenation, complement, and kleene star
+    \item Turing recognizable: union, intersection, concatenation, and kleene star
+\end{itemize}
+
+\section{Turing Machines}
+\subsection{Church Turing Thesis}
+\begin{itemize}
+    \item Algorithms and turing machines are basically equivalent.
+\end{itemize}
+\subsection{Showing Turing Decidable}
+\begin{itemize}
+    \item Guaranteed to halt on accept/reject.
+    \item By given, want, construction, correctness. Make sure that our machine terminates.
+\end{itemize}
+
+\subsection{Showing Turing Recognizable}
+\begin{itemize}
+    \item Guaranteed to accept, but may loop.
+    \item By given, want, construction, correctness.
+    \item Make sure that inner loops terminates in finite steps, but outer loop can be infinite. E.g. use shortlex ordering up to a certain amount of steps.
+\end{itemize}
+
+\subsection{Co-Turing Recognizable}
+\begin{itemize}
+    \item The complement is Turing Recognizable.
+    \item If Co-TR and TR, then TD.
+\end{itemize}
+\end{document}

@@ -1,0 +1,23 @@
+\section{Generative}
+\subsection{Bayes/Discriminant}
+$h(\x) =\arg\max_c p(y_c|\x) = \arg \max_c \frac{p(\x|y_c)p(y_c)}{p(\x)}$\\
+Since we know that $p(\x)$ will divide all equally, and that each class is equally likely $p(y=c|\x) = 1/C$, we can simplify the discriminant function to be,\\
+$h(\x) = \arg \max_c \{\log p(\x|y=c)\} = \arg \max_c \{\delta_c(\x)\}$\\\\
+For the binary case,\\
+$h(\x) = \arg\max_{c=\pm 1}\delta_c(\x) = sign(\delta_{+1}(\x) - \delta_{-1}(\x)) = sign\left(\log \frac{p(\x|y=+1)}{p(\x|y=-1)}\right)$\\
+If we assume that $p(\x|y)$ are normal, then we can show we are modeling the same thing as logistic regression. Using naive bayes, we basically look at the points in a class, and memorize what the feature look like. This works given enough separation between features for classes.
+\subsection{Mixture}
+\underline{Detect $k$ components within a class}.\\
+$p(\x; \pi) = \sum_{c=1}^{k}p(y=c)p(\x|y=c)$\\
+We want but don't have binary indicators \textbf{z} for components, but we can't compute it. However, if we take the expectation wrt posterior of \textbf{z}, we can get the responsibilities $\gamma_{i,c}$ that estimate \textbf{z}. $E_{z_{ic}\sim \gamma_{ic}}[z_{ic}] = \sum_{z\in 0,1}z\cdot \gamma_{i,c}^{z} = \gamma_{i,c}$.\\\\
+\textbf{Algorithm}: Start with a guess of $\mu, \pi$, e.g. $\pi_c = 1/k$. Expectation to get $\gamma_{i,c}$, then MLE to get parameters. Repeat until convergence. Evidently, this depends a lot on initalization.\\\\
+\textbf{Gaussian mixture}\\
+$p(\X, Z; \pi, \mu_1,...) = \prod_{i=1}^{N}\prod_{c=1}^{K}(\pi_c \mathcal{N}(\x_i; \mu_c, \Sigma_c))^{z_{ic}}$\\
+$E[l(")] = \sum_{i}^{N}\sum_{c}^{K}\gamma_{ic}(\log \pi_c + \log \mathcal{N}(\x_i; \mu_c, \Sigma_c))$\\
+$\gamma_{ic} = \frac{\pi_c p(\x_i; \mu_c)}{\sum_{l=1}^{k}\pi_l p(\x_i; \mu_l)}$ by bayes\\
+$N_c = \sum_{i=1}^{N}\gamma_{ic}$\\
+$\hat{\pi}_c = \frac{N_c}{N}$\\
+$\hat{\mu}_c = \frac{1}{N_c} \sum_{i=1}^{N}\gamma_{ic}\x_i$ by MLE\\
+$\hat{\Sigma}_c = \sum_{i=1}^N \gamma_{ic}(\x_i - \hat{\mu}_c)(\x_i - \hat{\mu}_c)^{T}$\\\\
+One challenge, possibility of getting unlikely and overfitting to one point and getting a singularity, but we can imporse a prior on a covariance matrix based on $n$ hallucinated observations. One other challenge, how do we choose $k$? Validate on a heldout data set or penalizing the model directly.\\\\
+Probably should look at EM for regression? But tbh, don't remember this lecture...

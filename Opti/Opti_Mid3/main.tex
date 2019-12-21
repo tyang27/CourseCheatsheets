@@ -1,0 +1,288 @@
+\documentclass[6pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\usepackage{comment}
+\usepackage{listings}
+\usepackage[margin=0.5in]{geometry}
+
+\def\x{\textrm{x}}
+\def\xh{\hat{\textrm{x}}}
+\def\y{\textrm{y}}
+\def\z{\textrm{z}}
+\def\c{\textrm{c}}
+\def\d{\textrm{d}}
+\def\r{\textrm{r}}
+\def\b{\textrm{b}}
+\def\A{\textrm{A}}
+\def\N{\textrm{N}}
+\def\B{\textrm{B}}
+\def\I{\textrm{I}}
+\def\Ambyn{\textrm{A} \in \mathbb{R}^{m\times n}}
+\def\bm{\textrm{b} \in \mathbb{R}^{m}}
+\def\suchthat{\textrm{s.t.} }
+
+
+\title{Opti Mid3}
+\author{tyang27}
+\date{November 2019}
+
+\begin{document}
+
+\maketitle
+\section{Properties of matrices}
+Positive definite (PD), and Positive semidefinite (PSD).
+\subsection{Definite}
+Let $\A \in \mathbb{R}^{n\times n}$ be a symmetric matrix. $\A$ is
+\begin{itemize}
+    \item PSD iff $\forall~\d \in \mathbb{R}^{n}$ nonzero, $\d^T\A\d\geq 0$.
+    \item PD iff $\forall~\d \in \mathbb{R}^{n}$ nonzero, $\d^T\A\d>0$.
+    %\item Negative definite (ND) if $\forall~\d \in \mathbb{R}^{n}$ nonzero, $\d^T\A\d<0$.
+    %\item Negative semidefinite (NSD) if $\forall~\d \in \mathbb{R}^{n}$ nonzero, $\d^T\A\d\leq 0$.
+%\end{itemize}
+%Note: $\d^T\A\d = \sum_{i,j}a_{ij} d_i d_j \in \mathbb{R}$
+%\subsection{Eigenvalues and definite}
+%Let $\A \in \mathbb{R}^{n\times n}$ be a symmetric matrix, $\A$ is
+%\begin{itemize}
+    \item PSD iff all eigenvalues of $\A$ nonnegative ($\geq 0$).
+    \item PD iff all eigenvalues of $\A$ positive ($>0$). (Invertible!).
+    %\item ND iff all eigenvalues of $\A$ negative ($<0$)
+    %\item NSD iff all eigenvalues of $\A$ nonpositive($\leq 0$).
+\end{itemize}
+\subsection{PSD and invertible implies PD}
+If $\A \in \mathbb{R}^{n\times n}$ is a symmetric, invertible, PSD matrix, then  $\A$ is PD, and $\A^{-1}$ is PD as well.
+\begin{itemize}
+    \item Since invertible, all eigenvalues are nonzero.
+    \item Since PSD, eigenvalues are nonnegative.
+    \item Since eigenvalues are nonzero and nonnegative, must be positive and PD.
+    \item Since eigenvalues of inverse are just 1 over eigenvalue, which is still positive, so inverse is also PD.
+\end{itemize}
+$$eigenvalues(c\A) = c\lambda_i$$
+$$eigenvalues(c\I + \A) = c + \lambda_i$$
+
+\begin{comment}
+\section{One dimension Taylor}
+Let $f:(a,b)\in \mathbb{R}$ sufficiently smooth, $\Bar{x} \in (a,b)$. Then $\forall~x \in (a,b)$ and $k\in\mathbb{N}$ (nonnegative),
+\begin{align*}
+f(x) &= f(\Bar{x}) + \frac{f'(\Bar{x})}{1!}(x - \Bar{x}) + \ldots + \frac{f^{(k)}(\Bar{x})}{k!}(x - \Bar{x})^k + \frac{f^{(k+1)}(\xi)}{(k+1)!}(x - \Bar{x})^{(k+1)}\\
+&= g(x) + remainder
+\end{align*}
+\end{comment}
+
+\section{Higher dimension Taylor}
+Note that hessian is symmetric.\\
+Given function $f:\mathbb{R}^n\to \mathbb{R}$, sufficiently smooth, $\Bar{\x} \in \mathbb{R}^n, \d\in\mathbb{R}^n$. Consider a function around the point $\Bar{\x}$ in direction $\d$,
+$$h(\alpha) = f(\Bar{\x}+\alpha\d)$$
+1st order:
+$$h(\alpha) = f(\Bar{\x}+\alpha\d) = f(\Bar{\x}) + (\nabla f^T(\z_1)\d)\alpha$$
+2nd order:
+$$h(\alpha) = f(\Bar{\x}+\alpha\d) = f(\Bar{\x}) + (\nabla f^T(\Bar{\x})\d)\alpha + \frac{1}{2}(\d^T \nabla^2 f(\z_2)\d)\alpha^2$$
+Where $\z$ is on the line segment between $\Bar{\x},~ \Bar{\x}+\d$.
+
+\subsection{Descent direction}
+Let $f:\mathbb{R}^{n}\to \mathbb{R}$ c1, $\x \in \mathbb{R}^n$. $d$ is a descent direction iff $$\nabla f^T(\Bar{\x})\d<0$$
+%$$f(\Bar{\x}+\alpha\d)<f(\Bar{\x})$$
+%where $\alpha>0$ and small enough.\\
+Note: steepest direction when $\nabla f(\Bar{\x}) \neq 0$ is $$\d=-\nabla f(\Bar{\x})$$
+Proof:
+$$f(\Bar{\x}+\alpha\d)=f(\Bar{\x}) + [\nabla f^T(\z_1)\d]_{\color{red}-}[\alpha]_{\color{red}+} < f(\Bar{\x}))$$
+\section{Extrema}
+Suppose $S\subseteq \mathbb{R}^n$ open, $\Bar{\x} \in S$, $f:S\to \mathbb{R}$ \ldots
+\subsection{First order necessary condition}
+\ldots and $f$ is c1.
+$$\Bar{\x} \textrm{ is a local min}\implies \nabla f(\Bar{\x}) = 0$$
+Proof: By contradiction, if gradient is not zero, then there would be a descent direction.
+\subsection{Second order necessary condition}
+\ldots and $f$ is c2.
+$$\Bar{\x} \textrm{ is a local min}\implies \nabla^2 f(\Bar{\x}) \textrm{ is PSD}$$
+Proof: If hessian is not PSD, then $\exists ~\d \in \mathbb{R}^n$ nonzero s.t. $\d^T\nabla^2 f(\Bar{\x})\d < 0$.
+$$f(x) = f(\Bar{x}) + [\nabla f^T(\Bar{\x})\d]_{\color{red}0}\alpha + \frac{1}{2}[\d^T \nabla^2 f(\Bar{\x})\d]_{\color{red}-}[\alpha^2]_{\color{red} +} \leq f(\Bar{\x})$$
+However, $\Bar{\x}$ is a local min, so we have reached a contradiction.
+
+\subsection{Second order sufficient condition}
+\ldots and $f$ is c2.
+$$\nabla f(\Bar{\x})=0,~\nabla^2 f(\Bar{\x}) \textrm{ is PD}\implies \Bar{\x} \textrm{ is a strict local min}$$
+Proof:
+$$f(x) = f(\Bar{x}) + [\nabla f^T(\Bar{\x})\d]_{\color{red}0}\alpha + \frac{1}{2}[\d^T \nabla^2 f(\z)\d]_{\color{red}+}[\alpha^2]_{\color{red} +} > f(\Bar{\x})$$
+Note: Must be PD and not PSD, since we could have inflection/saddle points.
+
+\section{Convexity}
+Note: we don't really care about concavity, because $f$ is convex iff $-f$ is concave, so we only need to think about one.
+\subsection{Convex set}
+$S\subseteq \mathbb{R}^n$ is convex set if
+$$\forall \x,\y \in S,~\lambda\in[0,1],~ \lambda \x + (1-\lambda)\y \in S $$
+\subsection{Convex function}
+$S\subseteq \mathbb{R}^n$ nonempty convex set, $f:S\to \mathbb{R}$. 
+\begin{itemize}
+    \item $f$ is a convex function if
+$$\forall \x,\y \in S,~\lambda\in[0,1],~ f(\lambda \x + (1-\lambda)\y) \leq \lambda f(\x) + (1-\lambda) f(\y)$$
+    \item $f$ is a strictly convex function if 
+    $$\forall \x,\y \in S,~\x \neq \y,~ \lambda\in[0,1],~ f(\lambda \x + (1-\lambda)\y) < \lambda f(\x) + (1-\lambda) f(\y)$$
+\end{itemize}
+\subsubsection{Using first degree taylor}
+$S\subset \mathbb{R}^n$ open convex set, $f:S\to\mathbb{R}$ c1 function. $f$ is...
+\begin{itemize}
+    \item convex iff $$\forall~ \x,\hat{\x} \in S, ~f(\x)\geq f(\hat{\x}) + \nabla f(\hat{\x})^T(\x-\hat{\x})$$
+    \item stritly convex iff $$\forall~ \x,\hat{\x} \in S, ~\x \neq \hat{\x}, ~f(\x)>f(\hat{\x}) + \nabla f(\hat{\x})^T(\x-\hat{\x})$$
+\end{itemize}
+\subsubsection{Using hessian}
+$S\subset \mathbb{R}^n$ open convex set, $f:S\to\mathbb{R}$ c2 function.
+\begin{itemize}
+    \item $f$ is convex iff $\nabla^2 f(\x)$ is PSD $\forall~ \x \in S$.\\
+    Proof:\\
+    $\Longleftarrow~\forall~\x, \hat{\x} \in S$
+    $$f(\x) = f(\hat{\x}) + \nabla f(\hat{\x})^T(\x - \hat{\x}) + \left[\frac{1}{2}(\x - \hat{\x})^T \nabla^2f(\z) _{\color{red}\geq 0} (\x - \hat{\x})_{\color{blue}\geq 0}\right]_{\color{red}\geq 0}$$
+    $$f(\x) \geq f(\hat{\x}) + \nabla f(\hat{\x})^T(\x - \hat{\x})$$
+    $\Longrightarrow$ converse
+    $$\textrm{not PSD} \implies \exists~ \d \in \mathbb{R}^n \textrm{ s.t. } \d^T\nabla^2f(\x)\d < 0$$
+    $$f(\x) = f(\x) + \nabla f(\hat{\x})^T(\x-\hat{\x}) + \frac{1}{2}(\x - \hat{\x})^T \nabla^2f(\z)(\x - \hat{\x})_{\color{red}-}$$
+    $$f(\x) < f(\hat{\x}) + \nabla f(\hat{\x})^T (x-\hat{\x})$$
+    \item if $\nabla^2 f$ is PD, then strictly convex (converse not true e.g. $x^4$ is strictly convex but has $\nabla^2 f(x)$ at $x=0$).\\
+    Proof:\\
+    $\Longrightarrow~\forall~ \x, \hat{\x} \in S,~ \x \neq \hat{\x}$
+    $$f(\x) = f(\hat{\x}) + \nabla^Tf(\hat{\x})(\x - \hat{\x}) + \left[\frac{1}{2}(\x - \hat{\x})^T \nabla^2 f(\z)_{\color{red}> 0} (\x - \hat{\x})_{\color{blue}> 0}\right]_{\color{red}>0}$$
+\end{itemize}{}
+
+\subsubsection{Using epigraph}
+$S\subseteq \mathbb{R}^n$, $f:S\to \mathbb{R}$.
+Suppose $S$ nonempty convex set and $f:S\to \mathbb{R}$. 
+$$f \textrm{ is convex iff } epigraph(f) = \left\{  \begin{bmatrix}\x\\y\end{bmatrix}~|~ \x \in S, y \in \mathbb{R}, y\geq f(\x)  \right\}\textrm{ is a convex set}$$
+
+\subsection{Support theorem}
+$S\subseteq \mathbb{R}^n$ convex set, $\x$ is boundary point.
+$$\exists~ \textrm{ hyperplane containing }\x \textrm{ s.t. } S \textrm{ is completely in an associated half space}$$
+
+\subsection{Global is local minimizer for convex function}
+Suppose $S\subseteq \mathbb{R}^n$ open convex set, $f:S\to\mathbb{R}$ convex, c1 function.
+$$\hat{\x} \textrm{ is global minimizer}\Longleftrightarrow \hat{\x} \textrm{ is local minimizer} \Longleftrightarrow \nabla f(\hat{\x})=0$$
+Proof:\\
+Global min is a local min. Local min have gradient of 0, by first order necessary condition. If gradient is 0, then first order taylor is $f(\x)\geq f(\xh)+0$ so it is a global minimizer.\\\\
+Furthermore, if function is strictly convex, the global min is unique and strict.
+
+\section{Newton's method}
+Assume $f$ is c2, $\xh$ is initial guess. Take second degree Taylor.
+$$f(\x) \approx g(\x) = f(\xh) + \nabla f(\xh)^T(\x-\xh) + \frac{1}{2}(\x-\xh)^T\nabla^2 f(\xh)(\x-\xh)$$
+Derive wrt $\x$, set to 0, then solve for $\x$
+\begin{align*}
+  g'(\x) = 0 &= \nabla f(\xh) + \nabla^2 f(\xh)(\x-\xh)\\
+  \nabla^2 f(\xh)(\x-\xh) &= -\nabla f(\xh)\\
+    \x-\xh &= -[\nabla^2 f(\xh)]^{-1}\nabla f(\xh)\\
+    \x &= \xh - [\nabla^2 f(\xh)]^{-1} \nabla f(\xh)\\
+    \x &= \xh - \d
+\end{align*}
+Assume $f$ is convex, $\nabla^2f(\xh)$ is invertible, $\nabla f(\xh) \neq 0$. $\d$ is a descent direction.\\
+Recall, a vector $\d$ is a descent direction if $\nabla f(\xh)^T \d < 0$.
+$$\nabla f(\xh)^T \d  = \left[-\nabla f(\xh)^T[\nabla^2 f(\xh)]^{-1}_{\color{red}>0} \nabla f(\xh)_{\color{blue}>0}\right]_{\color{red}<0}$$
+Thus, $\d$ is a descent direction.
+\subsection{Algorithm}
+$x_0 \in \mathbb{R}^n$\\
+for $k=1\ldots $ until $\nabla f(x_k) = 0$\\
+\indent $\x_{k+1} = \x_{k} -[\nabla^2 f(\xh_k)]^{-1} \nabla f(\x_k)$
+
+\section{Steepest descent}
+\subsection{Algorithm}
+$\x_0 \in \mathbb{R}^n$\\
+for $k=1\ldots$ until $\nabla f(x_k) = 0$\\
+\indent $\alpha_* = \min_{\alpha>0} f(\x_{k} - \alpha \nabla f(\x_{k}))$\\
+\indent $\x_{k+1} = \x_{k} - \alpha_* \nabla f(\x_{k})$
+
+\subsection{Note}
+This algorithm moves orthogonally. That is, $\nabla f(\x_k) \bot \nabla f(\x_{k+1})$.
+$$g'(\alpha_*) = 0 = \nabla f(\x_k - \alpha \nabla f(\x_k))[-\nabla f(\x_k)] = \nabla f(\x_{k+1})^T\nabla f(\x_k)$$
+
+\section{Ferkas theorem}
+$\A\in \mathbb{R}^{m\times n},~ \b\in\mathbb{R}^n$. Either:
+\begin{enumerate}
+    \item $\exists~ \x \in \mathbb{R}^n$ s.t. $\A\x=\b$, $\x\geq 0$
+    \item $\exists~ \y \in \mathbb{R}^{m}$ s.t. $\b^T\y>0$, $\A^T\y\leq 0$
+\end{enumerate}
+Proof: Consider (LP0), (DP0), where $\c=0$
+\begin{itemize}
+    \item If 1 is true,
+    \begin{align*}
+    \exists ~\x~ \suchthat~ \A\x=\b,~ \x\geq 0\\
+    \textrm{(LP0) is feasible} & ~\textrm{ From construction}\\
+    \b^T\y\leq \c^T\x = 0 & ~\textrm{ By weak duality}\\
+    \b^T\y\not> 0
+    \end{align*}
+    So 2 is false.
+    \item If 2 is false,
+    \begin{align*}
+        \nexists~\y~\suchthat \b^T\y>0,~\A^T\y\leq 0\\
+        \forall~\y~\suchthat~\b^T\y\leq 0 \textrm{ or } \A^T\y>0\\
+        \y=0 \textrm{ maximizes } \b^T\y &~\textrm{Optimality}\\
+        \c^T\x=\b^T\y=0 & ~\textrm{By strong duality}\\
+        \textrm{(LP0) is feasible}
+    \end{align*}{}
+    So 1 is true.
+\end{itemize}{}
+\section{Gordons theorem}
+$\A\in\mathbb{R}^{m\times n}$. Either:
+\begin{enumerate}
+    \item $\exists~\x \in \mathbb{R}^n$ s.t. $\A\x=0, \x\geq 0, \x$ nonzero.
+    \item $\exists~ \y \in \mathbb{R}^m$ s.t. $\A^T\y<0$
+\end{enumerate}{}
+Proof:
+\begin{itemize}
+    \item 2 is true iff $$\exists~\y, \varepsilon,~\varepsilon>0 ~\suchthat~A^T\y+\varepsilon 1 \leq 0$$
+    iff (use linalg)
+    \begin{align*}
+        \exists\begin{bmatrix}\y\\\varepsilon\end{bmatrix},~\begin{bmatrix}0\\1\end{bmatrix}^T\begin{bmatrix}\y\\ \varepsilon\end{bmatrix}>0 &~(\b'^T\y'>0)\\
+        \begin{bmatrix}\A^T& 1\end{bmatrix}\begin{bmatrix}\y\\\varepsilon\end{bmatrix} \leq 0 &~ (\A'^T\y'\leq 0)
+    \end{align*}{}
+    iff (use Farkas 2$\to$1)
+    $$\nexists~ \x \in \mathbb{R}^n~\suchthat{}~\begin{bmatrix}\A\\ 1^T\end{bmatrix}\x = \begin{bmatrix}0\\1\end{bmatrix}~(\A'^T\y'=\b')$$
+    iff
+    \begin{align*}
+        \A\x=0\\
+        \sum x = 1\\
+        \x \geq 0
+    \end{align*}
+    We know that $\sum x = 1$ iff $\x$ is nonzero. In the forward direction, obvious. In the reverse direction, we can scale $x$ without affecting $\A\x=0$. So 1 is true.
+\end{itemize}{}
+\subsection{Active constraint}
+$$\mathcal{A}_\x = \{i~|~g_i(\x) = 0\}$$
+Let $m=|\mathcal{A}_x|$
+\begin{itemize}
+    \item \textbf{Obvious:} If $\x$ feasible in (P) is a local min of (P), then $\nexists~ \d$ that is simultaneously a descent direction for $f$ and for all active $g_i,~ i\in \mathcal{A}_\x$. (By contradiction, if there was a descent direction, would not be a local min).
+    \item \textbf{LinAlg:} If $\x$ feasible in (P) is a local min of (P), then $$\nexists~ \d ~\suchthat~J^T\d<0$$
+    $$J^T = \begin{bmatrix}\nabla^Tf(\x)\\
+    \ldots\\
+    \nabla^T g_i(\x)\end{bmatrix}, ~i \in \mathcal{A}_\x$$
+    \item \textbf{Gordon's 2$\to$1:} If $\x$ feasible in (P) is a local min of (P), then $$\exists~ \lambda \geq 0 \textrm{ nonzero s.t. } J^T\lambda = 0$$
+    \item \textbf{Inactive/CompSlack:} If $\x$ feasible in (P) and is a local min of (P) then $\exists \begin{bmatrix}\beta\\\lambda\end{bmatrix}\geq 0$ s.t. 
+    $$[\nabla f(\x), \ldots \nabla g_i(\x)] \begin{bmatrix}\beta\\\lambda\end{bmatrix} = 0$$
+    $$\lambda_i * g_i(\x) = 0\implies \sum \lambda_i g_i(\x)=0\implies \lambda \cdot g(\x) = 0$$
+    \item \textbf{Fritz John}: If $\x$ feasible in (P) and is a local min of (P), then $$\exists~\lambda, \beta ~\suchthat{}$$
+    $$\beta\nabla f(\x) + \nabla g(\x)\lambda = 0$$
+    $$\lambda^T g(\x) = 0$$
+    $$\lambda, \beta \geq 0$$
+\end{itemize}{}
+\subsection{KKT}
+$$(P)~\min f(\x)$$
+$$\suchthat{}~g(\x) \leq 0$$
+If $\x$ feasible and local min of (P) and $\x$ satisfies a constraint qualification that $\{\nabla g_i(\x)~|~i\in\mathcal{A}_\x\}$ are linearly indepedent, then $\exists~ \lambda \in\mathbb{R}^m$ s.t.
+$$\nabla f(\x) + \nabla g(\x)\lambda = 0$$
+$$\lambda \cdot g(\x) = 0$$
+$$\lambda \geq 0$$
+\subsubsection*{Find all KKT points}
+\begin{itemize}
+    \item Check when no active constraints (interior), aka all lambdas 0, aka $\nabla f(\x)=0$.
+    \item Check when one constraint active.
+    \item Check when multiple constraints active.
+\end{itemize}{}
+\subsubsection*{Find and verify KKT point}
+\begin{itemize}
+    \item Guess point.
+    \item Check which constraints are active, $g(x)=0$ and say that the  $\lambda=0$ for inactive, so that $\lambda \cdot g(\x)=0$
+    \item Calculate $\nabla f$ and $\nabla g$ for active constraints. Check nonzero and linear independent, and write that it satisfies constraint qualification.
+    \item Set $\nabla f(\x) + \lambda_i \nabla g_i(\x)=0$, solve for $\lambda_i$.
+    \item Verify that $\lambda_i > 0$.
+\end{itemize}{}
+
+\end{document}

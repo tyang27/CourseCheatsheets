@@ -1,0 +1,252 @@
+\documentclass[6pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\usepackage{comment}
+\usepackage[margin=0.5in]{geometry}
+
+\def\x{\textrm{x}}
+\def\y{\textrm{y}}
+\def\z{\textrm{z}}
+\def\c{\textrm{c}}
+\def\r{\textrm{r}}
+\def\b{\textrm{b}}
+\def\A{\textrm{A}}
+\def\N{\textrm{N}}
+\def\B{\textrm{B}}
+\def\I{\textrm{I}}
+\def\Ambyn{\textrm{A} \in \mathbb{R}^{m\times n}}
+\def\bm{\textrm{b} \in \mathbb{R}^{m}}
+\def\suchthat{\textrm{s.t.} }
+
+
+\title{Opti Mid2}
+\author{tyang27}
+\date{October 2019}
+
+\begin{document}
+
+\maketitle
+\section{Dual feasibility}
+$$\A\in \mathbb{R}^{m\times n}, \x \in \mathbb{R}^{n}, \y \in \mathbb{R}^{m}, \c \in \mathbb{R}^n, \b \in \mathbb{R}^{m}$$
+\subsection{Canonical form}
+$$LP=\min \c^T\y ~\textrm{ s.t. }~ \A\x\geq\b, \x\geq 0$$
+$$DP=\max \b^T\y
+~\textrm{ s.t. }~ \A^T\y\leq \c, \y\geq 0$$
+
+\subsection{Standard form}
+$$LP=\min \c^T\y ~\textrm{ s.t. }~ \A\x=\b, \x\geq 0$$
+$$DP=\max \b^T\y ~\textrm{ s.t. }~ \A^T\y\leq c$$
+
+\subsection{Dual of dual is primal}
+\begin{itemize}
+\item LP: $\min \c^T\x$ s.t. $\A\x\geq \b, \x \geq 0$
+\item DP(LP): $\max \b^T\y$ s.t. $-\A^T\y\geq -c, \y\geq 0$
+\item DP(DP(LP)): $\max -\c^T\z$ s.t. $(-\A^T)^T\z\geq -(-\b)^T, \z\geq 0$ \item $\min \c^T\z$ s.t. $\A\z\geq\b, \z\geq 0$
+\end{itemize}
+
+\subsection{Converting between forms}
+\subsubsection{LP canonical to DP canonical through standard}
+LP canonical:
+$$\min \c^T\x ~\textrm{ s.t.}~ \A\x\geq b, \x\geq 0$$
+LP standard:
+$$\min \begin{bmatrix}\c\\0\end{bmatrix}^T\begin{bmatrix}\x\\\z\end{bmatrix} ~\textrm{ s.t.}~ \begin{bmatrix}\A & -I\end{bmatrix}\begin{bmatrix}\x\\\z\end{bmatrix} = b, \x, \z\geq 0$$
+DP standard:
+$$\max \b^T\y ~\textrm{ s.t.}~ \begin{bmatrix}A^T \\-I\end{bmatrix} \y \leq \begin{bmatrix}\c\\0\end{bmatrix}$$
+$$\max \b^T\y ~\textrm{ s.t.}~ \A^T\y \leq \c, -\y\leq 0$$
+DP canonical:
+$$\max \b^T\y ~\textrm{ s.t.}~ \A^T\y \leq \c, \y\geq 0$$
+
+\subsubsection{LP standard to DP standard through canonical}
+LP standard:
+$$\min \c^T\x ~\textrm{ s.t. }~ \A\x=\b, \x\geq 0$$
+LP canonical:
+$$\min \c^T\x ~\textrm{ s.t. }~ \begin{bmatrix}\A\\ -\A\end{bmatrix}\x\geq \begin{bmatrix}\b\\-\b\end{bmatrix}, \x\geq 0$$
+DP canonical:
+$$\max \begin{bmatrix}\b\\-\b\end{bmatrix}^T\begin{bmatrix}\textrm{u}\\\textrm{v}\end{bmatrix} ~\textrm{ s.t. }~ \begin{bmatrix}\A\\ -\A\end{bmatrix}^T\begin{bmatrix}\textrm{u}\\\textrm{v}\end{bmatrix}\leq\c, \textrm{u}, \textrm{v}\geq 0$$
+DP standard: Let $\y = \textrm{u}-\textrm{v}$
+$$\max \b^T(\textrm{u}-\textrm{v}) ~\textrm{ s.t. }~ \A^T(\textrm{u}-\textrm{v}) \leq \c$$
+$$\max \b^T\y ~\textrm{ s.t. }~ \A^T\y \leq \c$$
+
+\section{Optimality checklist}
+\begin{enumerate}
+    \item Basic: $\A\x=\b$
+    \item Feasibility: $\x\geq 0$
+    \item Dual: $\b^T\y \leq \c$
+    \item Supervisor: $\b^T\y = \c^T\x$
+\end{enumerate}
+If we have all these conditions, then we have optimality by supervisor principle.
+
+\subsection{Weak duality}
+Given (LP), (DP). Suppose $\x$ is feasible in (LP) and $\y$ is feasible in (DP). Then, $$ofv_{DP}\leq ofv_{LP}$$
+Proof standard:
+Since $\x,\y$ feasible in (LP), (DP), respectively, $\A\x=\b, \x\geq 0$ and $\A^T\y\leq \c$, respectively. Thus,
+\begin{align*}
+    \b^T\y &= (\A\x)^T\y && \text{Since (1) } \A\x=\b\\
+    &= \x^T\A^T\y\\
+    &\leq \x^T\c && \text{Since (3) }\A^T\y\leq c\\
+    &= \c^T\x
+\end{align*}
+Proof symmetric:
+Since $\x,\y$ feasible in (LP), (DP), respectively, $\A\x\leq\b, \x\geq 0$ and $\A^T\y\leq \c$, respectively. Thus,
+\begin{align*}
+    \b^T\y &\leq (\A\x)^T\y && \text{Since (1) } \A\x\leq\b\\
+    &= \x^T\A^T\y\\
+    &\leq \x^T\c && \text{Since (3) }\A^T\y\leq c\\
+    &= \c^T\x
+\end{align*}
+
+\subsection{Supervisor Principle}
+Given $\x$ feasible in (LP), $\y$ feasible in (DP). If $ofv(x)=ofv(y)$ ($\b^T\y=\c^T\x$), then $\x$ is optimal in (LP) and $\y$ is optimal in (DP).
+\begin{align*}
+    \c^T\x &= \c_B^T\x_B + \c_N^T\x_N\\
+    &= \c_B^T\x_B\\
+    &= \c_B^T(\B^{-1}\b)\\
+    &= (\c_B^T\B^{-1})\b\\
+    &= \y^T\b
+\end{align*}
+
+\subsubsection{Corollary}
+If (LP) is unbounded, then (DP) is infeasible.
+
+\subsection{Strong duality}
+If (LP) is feasible and objective function is bounded below, then (LP) has an optimal solution and (DP) has an optimal solution. Furthermore, their oofv are equal ($\b^T\y=\c^T\x$).\\
+Proof: At optimality of standard LP,
+\begin{align*}-\r_N^T &\leq 0\\
+r_N^T &\geq 0\\
+\c_\B^T\B^{-1}\A - \c^T &\geq 0\\
+\c_\B^T\B^{-1}\A &\geq \c^T
+\end{align*}
+Choose $\y^{*T} = \c_B^T\B^{-1}$ as potential solution for (DP).
+\begin{enumerate}
+    \item We know that $\y^*$ is dual feasible (3) because of how we chose it,
+    \begin{align*}
+    \c_\B^T\B^{-1}\A &\geq \c^T\\
+    \y^{*T}\A &\geq \c^T
+    \end{align*}
+    \item We know that $\y^*$ is optimal by the supervisor principle.
+    \begin{align*}
+        \x&=\begin{bmatrix}\B^{-1}\b\\0\end{bmatrix}\\
+        \c^T\x &= \c^T\B^{-1}\b\\
+        \c^T\x &= \y^T\b\\
+        \c^T\x &= \b^T\y
+    \end{align*}
+\end{enumerate}
+
+
+\subsection{Complementary slackness for standard}
+Suppose $\x$ is feasible in (LP) and $\y$ feasible in $(DP)$. Then $\x$ is optimal in (LP) and $\y$ is optimal in (DP) iff dual slack is complementary to x. That is,
+$$(c-\A^T\y)\cdot \x = 0$$
+Proof: Recall from weak duality,
+\begin{align*}
+    \b^T\y &= (\A\x)^T\y\\
+    &= \x^T\A^T\y\\
+    &\color{red}\leq \x^T\c\\
+    &=\c^T\x
+\end{align*}
+Note that $\x,\y$ are respectively optimal in (LP), (DP) iff $\b^T\y = \c^T\x$ because of strong duality in the forward direction, and supervisor in the reverse direction. In order for this to be true from weak duality, we need for $\x^T\A^T\y \leq \x^T\c$ to be true. Putting them both on one side and factoring out $\x$, we see that this is true iff $0 = \x^T(\c-\A^T\y)$
+
+\subsection{Complementary slackness for symmetric}
+Suppose $\x$ is feasible in (LP) and $\y$ feasible in $(DP)$. Then $\x$ is optimal in (LP) and $\y$ is optimal in (DP) iff dual slack is complementary to x. That is,
+$$(c-\A^T\y)\cdot \x = 0 \textrm{ and }(A\x-b)\cdot\y=0$$
+
+Proof: Recall from weak duality,
+\begin{align*}
+    \b^T\y & \color{red}\leq  (\A\x)^T\\
+    &= \x^T\A^T\y\\
+    &\color{red} \leq \x^T\c\\
+    &= \c^T\x
+\end{align*}
+Note that $\x,\y$ are respectively optimal in (LP), (DP) iff $\b^T\y = \c^T\x$ because of strong duality in the forward direction, and supervisor in the reverse direction. In order for this to be true from weak duality, we need for $\x^T\A^T\y \leq \x^T\c$ and $b^T\y \leq (\A\x)^T\y$ to be true. Putting them both on one side and factoring out $\x$, we see that this is true iff $0 = \x^T(\c-\A^T\y)$ and $0=\y^T(\A\x - \b)$
+
+
+\section{Sensitivity}
+Consider optimal tableau for LP. Then, adjust by small enough $\Delta \b$.
+\begin{itemize}
+    \item Assume nondegeneracy (otherwise, would need to use dual simplex).
+    \item If $\B^{-1}(\b+\Delta \b) \geq 0$, bfs will remain feasible and optimal.
+\end{itemize}{}
+    Each unit of change in $b$ changes oofv by $y$ for each element: $$\Delta oofv = \y^{*T}\Delta\b$$
+    $$\partial oofv / \partial b_i = \partial y_i$$
+
+\section{Dual simplex}
+\subsection{Tableau}
+Primal linear program:
+$$\min \c^T\x, \A\x\geq \b, \x\geq 0$$
+Convert min to max, add slack:
+$$\max -\c^T\x, \A\x-\I\z=\b, \x\geq 0$$
+Covnvert slack to identity for starting columns:
+$$\max -\c^T\x, -\A\x+\I\z=-\b, \x\geq 0$$
+\begin{tabular}{c|cc|c}
+    1 & -c & 0 & 0 \\
+    \hline
+    0 & -A & I & -b
+\end{tabular}
+
+\subsection{Algorithm}
+\begin{enumerate}
+    \item If the top is $\leq 0$, and the right is $\geq 0$, we are done. While this is not true, keep looping.
+    \item Take the most negative (smallest) entry in the rightmost column.
+    \item Considering negative entries in that row, choose the smallest ratio of top row to that row. If no entries are negative, then DP infeasible. If ratio is 0, then it is stalling.
+    \item Row reduction.
+    \item Repeat.
+    \item To write out solution, 0 if not basis. follow 1 to right hand side if basis. Can either include slack or not, depends on whether you are doing canonical or standard form.
+\end{enumerate}
+Note: Reasoning behind step 3. Say that minimum ratio is $\alpha_*/\beta_*$. $\alpha_0, \beta_0$ old values, and $\alpha_1, \beta_1$ new values for the current column. For each column, $$\alpha_1 = -\beta_0*\alpha_*/\beta_* + \alpha_0$$
+Starting with the fact that we know that this is the smallest ratio,
+\begin{align*}
+    \frac{\alpha_*}{\beta_*} &\leq \frac{\alpha_0}{\beta_0}\\
+    \frac{\alpha_*\beta_0}{\beta_*} &\leq \alpha_0\\
+    0 &\geq \alpha_0 - \frac{\alpha_* \beta_0}{\beta_*}
+\end{align*}
+Therefore, the top row will remain nonpositive.
+
+\subsection{Optimality}
+Dual slack:
+$$\c-\A^T\y$$
+At optimality:
+\begin{align*}
+    \A^T\y &\leq c\\
+    0 &\leq \c - \A^T\y\\
+    0 &\leq \c^T - \y^T\A\\
+    &= \c^T - \y^T\A\\
+    &= \begin{bmatrix}c_B^T & c_N^T\end{bmatrix} - (\c_B^{T}\B^{-1})\begin{bmatrix}B & N\end{bmatrix}\\
+    &= \begin{bmatrix}0 & \c_N^T - \c_B^T\B^{-1}\N\end{bmatrix}\\
+    &= \begin{bmatrix}0 & \r_N^T\end{bmatrix}
+\end{align*}
+
+\section{Comparing primal/dual}
+\subsection{Choosing algorithms}
+\begin{itemize}
+    \item If right is positive and top is negative, optimal!
+    \item If right is positive and top mixed or positive, then primal simplex.
+    \item If top is negative, and right is negative or mixed, then dual simplex.
+    \item If both mixed, use 2 phase or big M to try to find basis.
+\end{itemize}
+
+\subsection{Maintenance}
+\begin{itemize}
+    \item In both, (1) and (4) are given.
+    \item In primal simplex, maintain (2) $\x\geq 0$ by pivoting, work towards (3) $\A^T\y\leq c$ by going from basis to basis. In other words, in primal simplex, we maintain right as positive, and terminate when top is negative.
+    \item In dual simplex, maintain (3) $\A^T\y\leq c$ by pivoting, work towards (2) $\x\geq 0$ by going from basis to basis. In other words, in dual simplex, we maintain the top as negative, and terminate when the right is positive.
+\end{itemize}
+
+\subsection{Special conditions}
+\begin{itemize}
+    \item LP, DP both bounded.
+    \item If LP is unbounded, then DP is infeasible.
+    \item If DP is unbounded, then LP is infeasible.
+    \item LP, DP infeasible.
+\end{itemize}
+Note that infeasible does not imply unbounded, since both can be infeasible.
+\begin{itemize}
+    \item DP unbounded if pivot row is all positive.
+    \item LP unbounded if pivot column is all negative.
+\end{itemize}{}
+
+\end{document}

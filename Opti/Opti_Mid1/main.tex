@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsfonts}
+
+\title{Optimization Mid1}
+\author{tyang27 }
+\date{September 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Programs}
+\subsection{Generic problem}
+Minimize objective function $f:S\subseteq \mathbb{R}$ that maps set of feasible solutions $S$ to an output.
+\begin{align*}
+    \min f(x) \\
+    \textrm{s.t. } x \in S
+\end{align*}
+\subsection{Canonical form}
+\begin{align*}
+    \min c_1x_1 + \dots c_nx_n\\
+    \textrm{s.t. } \textbf{Ax} &\geq \textbf{b}\\
+    \textbf{x} &\geq \textbf{0}
+\end{align*}
+
+\subsection{Standard form}
+\begin{align*}
+    \min c_1x_1 + \dots c_nx_n\\
+    \textrm{s.t. } \textbf{Ax} &= \textbf{b}\\
+    \textbf{x} &\geq \textbf{0}
+\end{align*}
+
+\subsection{Converting between forms}
+\begin{enumerate}
+    \item Between min and max: negate objective function costs and objective function value.
+    $$\min f(\textbf{c}, \textbf{x}) = \max -f(\textbf{c}, \textbf{x})$$
+    \item Between greater than or equal to for constraints: $$\textbf{Ax}\leq \textbf{b} \iff -\textbf{Ax}\geq -\textbf{b}$$
+\end{enumerate}{}
+
+
+\end{document}

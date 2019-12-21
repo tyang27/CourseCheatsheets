@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{algpseudocode}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+
+\title{Genomics Quiz}
+\author{tyang27}
+\date{December 2019}
+
+\lstset{
+    tabsize=2,
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    basicstyle=\ttfamily\small,
+    commentstyle=\color{gray}\ttfamily
+}
+
+\begin{document}
+
+\maketitle
+\section*{Markov}
+\subsection*{CPG island}
+Part of the genome where CG occurs particularly frequently. Plays a role in modulating gene expression. We would like to tell whether a k-mer is in an island or not.
+\subsection*{Markov Assumption}
+Assumption: Probability of item at position $k$ depends only on previous position, $x_{k-1}$
+$$P(x) = P(x_k|x_{k-1})P(x_{k-2}|x_{k-3})\ldots P(x_1)$$
+\subsection*{Algorithm}
+\begin{enumerate}
+    \item Let $P(B|A)$ be the number of times $AB$ appears divided by $A?$.
+    \item Given all CpG island substrings, for all combinations of letters, $P(x_{i}|x_{i-1})$.
+    \item Let the labels of Markov chain edges from $A$ to $B$ be $(P(B|A))$.
+    \item To get probability of inside CpG island, do calculation. Since we are multiplying probabilities, change to log to avoid underflow.
+    $$P(x_1)\prod_{i=2}^{n} P(x_{i}|x_{i-1})\implies  \sum_{i=2}^{n}\log P(x_{i}|x_{i-1}) + \log P(x_1)$$
+    \item Do the same for substrings not in CpG islands. Can either log or not.
+    $$\log \frac{P(x)\textrm{ in CpG}}{P(x) \textrm{ not in CpG}}$$
+\end{enumerate}{}
+
+\section*{Sketching}
+\subsection*{Problems}
+\begin{itemize}
+    \item Set cardinality estimation
+    $$|A|$$
+    \item Set intersection
+    $$|A\cap B|$$
+    \item Set union
+    $$|A\cup B|$$
+    \item Set similarity
+    $$Jaccard(A,B) = \frac{|A\cap B|}{|A\cup B|}$$
+    \item Containment
+    $$Containment(A,B) = \frac{|A\cap B|}{|B|}$$
+\end{itemize}{}
+\subsection*{Hat problem}
+Given cards labelled 1 to $N$, then you pick a random subset $A$. Estimate $|A|=n$ using a constant number of representatives. Recall, elements in a set are unique. This relates to genomics because we hash our $k$-mers to get numbers, and then want to know cardinality.
+\section*{MinHash}
+\subsection*{Cardinality}
+\begin{itemize}
+    \item Min strategy - keep track of minimum. Then, assume that this tells us the average segment size. Assume $n+1$ intervals given by $n$ partitions (the chosen cards).
+    $$min = N/(n+1)$$
+    $$n = (N/min)-1$$
+    \item Bottom k strategy - keep track of $k$ smallest elements, and use $k$-th element $mink$ to tell us average size of $k$ segments. Good for two hat problem, e.g. cardinality of two sets under set operation.
+    $$mink = k*N/(n+1)$$
+    $$mink/k = N/(n+1)$$
+    $$n = (N*k/mink)-1$$
+    \item Min of k partitions strategy - take the min of $k$ hash functions. Same result as bottom k strategy in practice.
+    \item K-partition strategy - keep track of mins of k partitions. Good for cardinality of two lopsided sets under set operations. Used in HyperLogLog
+\end{itemize}
+Larger $k$ has more of an averaging effect, better estimate, with tradeoff of more work and storage. Each representative fits in $\lceil\log U\rceil$, where $U$ is the universe size, since we are storing hashes in binary.
+\subsection*{Jaccard}
+\begin{itemize}
+    \item Union of bottom $k$ - Combine two sketches by taking bottom $k$ of both subsets' sketches, unioned. 
+    Then, count the number of items in both, and divide by $k$. This will be an estimate of fraction of cardinality of intersection divided by cardinality of union.
+    \item Min of $k$ partitions strategy - take the min of $k$ hash functions. Count the number of items in both, as above. This scheme is good for comparing lopsided sets (one is large, one is small and localized).
+    %\item $k$ hash functions - Similar idea as bottom $k$, except we see how many minimums of $k$ unique hash functions are the same.
+\end{itemize}{}
+
+\section*{LogLog}
+\begin{itemize}
+    \item Intuition 1: We don't necessarily need to care about the exact minimum, can use approximate minimum by logging. Then, re-exponentiate later, though it won't precisely minimum. This saves space.
+    \item Intuition 2: Maximum leading zero count (LZC) of binary number roughly corresponds to the log of the minimum number. The larger the set, the smaller the min, the larger the LZC. When the set doubles, LZC increases by 1.
+\end{itemize}{}
+
+\subsection*{HyperLogLog (HLL)}
+\begin{itemize}
+    \item $k$-partition using the first $\log_2 k=p$ bits.
+    \item Get the max LZC or log2 min of the rest of the bits for each partition. This is the HLL array.
+    \item Re-exponentiate.
+    \item Averaging, bias correction.
+\end{itemize}
+\subsubsection*{Operations}
+\begin{itemize}
+    \item Union - elementwise max of LZC or elementwise min of log2 both sketches will roughly correspond to minimum of union.
+    \item Intersection - elementwise compare.
+\end{itemize}{}
+\subsubsection*{Tricks}
+\begin{itemize}
+    \item Vectorized and thus parallelized operations for elementwise maximum, etc.
+    \item Change log base to maximize bits in register used.
+\end{itemize}{}
+
+\section*{Bloom Filters}
+Esp. good for containment. Hash, then set bit to 1. We can use $k$ hash functions to better account for hash collisions. $m$ is size of filter.
+\begin{itemize}
+    \item Probability a given bit is 1: $1/m$.
+    \item Probability a given bit is 0: $1-1/m$
+    \item Probability a given bit is 0 after $n$ insertions, k hashes: $(1-1/m)^{nk}\approx e^{-nk/m}$
+    \item False positive rate: $[1-(1-1/m)^{nk}]^{k}$
+\end{itemize}{}
+The ideal number of hash functions is $m/n*\ln 2$.
+\subsection*{Operations}
+\begin{itemize}
+    \item Union - bitwise or
+    \item Intersection - not so easy
+    \item Containment - Set fraction of 0's to $e^{-nk/m}$, then solve for $n$.
+\end{itemize}
+\subsection*{Sequence bloom tree}
+Bitwise or of each read. Then, traverse the true, and don't go into a section the moment you see a 0.
+\end{document}

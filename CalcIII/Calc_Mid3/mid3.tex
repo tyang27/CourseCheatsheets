@@ -1,0 +1,46 @@
+
+\chapter*{Surfaces}
+\section*{Surface area}
+Let $T_u, T_v$ be tangents. Surface area is the sum of parallelogram areas.
+$$SA(S) = \iint_SdS = \iint_{D}||T_u\times T_v||dudv$$
+\subsection*{Surface area reparameterization}
+$$\iint_S f(\x)dS = \iint_D f(\Phi(u,v))||T_u\times T_v|| du dv$$
+%If 0, then this means that net integral is 0.
+\subsubsection{Surface orientation}
+If it exists, a surface orientation of $S\in \mathbb{R}^n$ is a choice of unit normal vector at each point of the surface so that the vectors vary continuously. At any point, although there are many options for normal vectors, there are only options for unit vectors (inside versus outside, or above versus below). E.g. a mobius strip doesn't have an orientation.
+
+\section*{Flux (vector surface integral)}
+Measures vector field flow across surface.
+For $F:\mathbb{R}^3\to\mathbb{R}^3$, $S=\Phi(D)$ where $\Phi:D\to\mathbb{R}^3$ a surface with a parameterization.
+$$\iint_{S}F\cdot dS=\iint_{D}F(\Phi(u,v))\cdot (T_u\times T_v)dudv$$
+
+\section*{Green's theorem}
+$$\int_{\partial D}F\cdot d\s = \int_{\partial D}P(x,y)dx + Q(x,y)dy = \iint_{D}\left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)dx dy$$
+Where $\partial D$ represents the boundary. Note that this is the scalar curl of $F$. Note that the boundary can be piecewise, in which case you just split the integral into pieces and sum them.
+\subsection*{Area of a bounded region}
+$$A(D) = \frac{1}{2}\oint xdy - ydx$$
+\subsection*{Circulation}
+$$\int_{c}F\cdot d\s$$
+\section*{Stokes Theorem}
+Let $S$ be a bounded piecewise smooth oriented surface in $\mathbb{R}^3$ where $\partial S$ is a finite set of piecewise c1-closed curves each oriented consistently wrt S. For $F$ a c1 vector field on $S$,
+$$\iint_{S}(\nabla \times F)\cdot d\S = \oint_{\partial S} F\cdot d\s$$
+If a surface has no boundary, the circulation is 0.
+\subsection*{Equivalence}
+For F a c1 vector field on a simply connected domain such as $\mathbb{R}^3$ the following are equivalent:
+\begin{itemize}
+    \item F is conservative (iff $F=\nabla f$)
+    \item For $c$ a simple closed curve, $\int_{c}F\cdot d\s = 0$
+    \item For any 2 oriented simple curves with the same endpoints, $\int_{c_1} F\cdot d\s= \int_{c_2}F\cdot d\s$
+    \item $\nabla \times F = 0$
+\end{itemize}{}
+
+\subsection*{Application}
+\begin{itemize}
+    \item Use LHS.
+    \item Use RHS.
+    \item Change to a different surface with the same boundary.
+\end{itemize}{}
+
+\section*{Gauss Theorem}
+Let $D$ be a bounded solid region in $\mathbb{R}^3$ whose boundary consists of a finite number of piecewise smooth, closed orientable surfaces. Oriented so that the normals point away from $D$. Then, the flux across the boundary:
+$$\iint_{\partial D}F\cdot d\S = \iiint_{D}(\nabla\cdot F) dV$$

@@ -1,0 +1,306 @@
+\chapter*{Extrema}
+\section*{Definitions}
+Let $f:U\subset \mathbb{R}^n\to\mathbb{R}$, $\x_0 \in U$. %Let $\mathcal{N}(\textrm{p})$ be neighborhood around point p.
+\begin{itemize}
+    \itemsep 0em
+    \item $\x_0$ is local min of $f$ iff
+    $$\exists~ \mathcal{N}(\x_0) \textrm{ s.t. } \forall~\x\in \mathcal{N}(\x_0),~ f(\x)\geq f(\x_0)$$
+    %\item $\x_0$ is local max of $f$ iff
+    %$$\exists~ \mathcal{N}(\x_0) \textrm{ s.t. } \forall~\x\in \mathcal{N}(\x_0),~ f(\x)\leq f(\x_0)$$
+    \item $\x_0$ is a strict local min of $f$ iff
+    $$\exists~ \mathcal{N}(\x_0) \textrm{ s.t. } \forall~\x\in \mathcal{N}(\x_0),~ \x \neq \x_0~ f(\x) > f(\x_0)$$
+    %\item $\x_0$ is a strict local max of $f$ iff
+    %$$\exists~ \mathcal{N}(\x_0) \textrm{ s.t. } \forall~\x\in \mathcal{N}(\x_0),~ \x \neq \x_0~ f(\x) < f(\x_0)$$
+    \item $\x_0$ is an absolute min iff
+    $$\forall~ \x\in U,~f(\x)\leq f(\x_0)$$
+    %\item $\x_0$ is an absolute max iff
+    %$$\forall~ \x\in U,~ f(\x)\geq f(\x_0)$$
+    \item Critical point - 
+    Either $Df(\x)$ not defined or $Df(\x_0)=0$.
+    \item Extrema - Local mins or maxes.
+    \item Saddle point - Critical point that is not an extremum.
+\end{itemize}
+\subsubsection*{A critical point is not necessarily extreme, but an extreme point is a critical}
+\begin{itemize}
+    \itemsep 0em
+    \item If a point is critical, it may not be an extrema. E.g. saddle point.
+    \item If $f$ is differentiable at $\x_0 \in U$ and $\x_0$ is extreme, then $Df(\x_0)=0$ and $\x_0$ is critical.
+\end{itemize}
+
+
+\section*{Extreme Value Theorem}
+\begin{itemize}
+    \itemsep 0em
+    \item Bounded - set $U$ is bounded iff $$\forall~\x\in U,~ \exists~M\in \mathbb{R}^+, \norm{\x}<M$$
+    In other words, we can draw a ball around it.
+    \item Closed - set $U$ is closed iff it contains interior points and boundary points.
+    \item Level sets are closed and bounded.
+\end{itemize}
+Let $U$ be closed and bounded.
+$$f:U\subset \mathbb{R}^n \to\mathbb{R} \textrm{ is continuous} \implies f \textrm{ has global min and max on } U$$
+
+\section*{Hessian}
+Let $f:\mathbb{R}^n\to \mathbb{R}$ be c2 at $\x_0$. Then, the Hessian matrix of $f$ at $\x_0$ is the symmetric matrix,
+$$Hf(\x_0) = \left[ \frac{\partial^2f}{\partial x_i\partial x_j} \right] \in \mathbb{R}^{n\times n}$$
+The Hessian as a function of $\mathbb{R}^n$,
+$$Hf(\x_0)(\h) = \frac{1}{2}\h^THf(\x_0)\h$$
+Hessian is positive definite iff
+\begin{itemize}
+    \item Hessian function returns positive.
+    $$\forall~\h \in \mathbb{R}^n,
+    \Big\{\begin{matrix}H(f)(\x)(\h) \geq 0 & \h\neq 0\\
+    Hf(\x)(\h)=0 & \h=0
+    \end{matrix}$$
+    %\item Negative definite iff
+    %$$\forall~\h \in \mathbb{R}^n,
+    %\Big\{\begin{matrix}H(f)(\x)(\h) \leq 0 & \h\neq 0\\
+    %Hf(\x)(\h)=0 & \h=0
+    %\end{matrix}$$
+    \item Or, determinant is positive and all of its diagonal sub-determinants are positive.
+\end{itemize}
+
+\subsubsection*{Positive definite hessian implies local min}
+Let  $f:U\subset \mathbb{R}^{n}\to \mathbb{R}$ be c2 function at critical point $\x_0 \in D$. $$Hf(\x_0) \textrm{ is PD}\implies \x_0 \textrm{ is a local min}$$
+
+\begin{comment}
+\subsection*{First derivative test}
+If:
+\begin{enumerate}
+\item $U\subset \mathbb{R}^n$ is open
+\item the function $f:U\subset \mathbb{R}^n\to \mathbb{R}$ is differentiable
+\item $\x_0$ is a local extremum
+\end{enumerate}
+then, $\textbf{D}f(\x_0)=\textbf{0}$, and $\x_0$ is a critical point of $f$.
+
+\subsection*{Second derivative test}
+If 
+\begin{enumerate}
+    \item $f:U\subset \mathbb{R}^n\to\mathbb{R}$ is $c^3$
+    \item $\x_0\in U$ is a critical point of $f$
+    \item $Hf(\x_0)$ hessian is positive definite
+\end{enumerate}{}
+then, $\x_0$ is a relative minimum of $f$. Similarly, if negative definite, relative maximum.
+
+
+\subsubsection*{Summary of absolute extrema}
+\begin{itemize}
+    \item Locate critical points.
+    \item Find all critical points viewed as function only on $\partial U$.
+    \item Compute value of $f$ at all critical points.
+    \item Compare values and select largest and smallest.
+\end{itemize}
+\end{comment}
+
+\section*{Lagrange Multipliers}
+Looks for constrained extrema by finding where gradient and level set are perpendicular. Recall that level sets are closed and bounded.
+\subsection*{Single constraint}
+\begin{itemize}
+    \itemsep 0em
+    \item Let $f:U\subset\mathbb{R}^n\to \mathbb{R}$,  $g:U\subset\mathbb{R}^n\to\mathbb{R}$ be c1 functions.
+    \item Let $S_c$ be c-level set of $g$, and $\x_0 \in U$ and $g(\x_0)=c$.
+    \item Let $f|S_c$ be $f$ restricted to $S_c$.
+\end{itemize}
+Assume $\nabla g(\x_0)\neq 0$ (smooth),
+$$\x_0 \textrm{ is local extrema on } f|S_c \Longleftrightarrow \exists~\lambda \textrm{ s.t. } \nabla f(\x_0) = \lambda \nabla g(\x_0)$$
+\subsection*{Multiple constraints}
+Use multiple lambdas $\lambda_{1..k}$ for smooth constraints $g_{1..k}$.
+$$\x_0 \textrm{ is local extrema on } f|S_c \Longleftrightarrow \exists~\lambda_1,\ldots,\lambda_k \textrm{ s.t. } \nabla f(\x_0) = \lambda_1 \nabla g_1(\x_0) + \dots + \lambda_k \nabla g_k(\x_0)$$
+
+\section*{Finding extrema}
+\begin{enumerate}
+    \itemsep 0em
+    \item Check continuity
+    \item Find critical points on open interior (No constraints, $\nabla f(x) = 0$
+    \item Find all constrained critical points on boundary using Lagrange multipliers (Constraints, $\nabla f(x) = \lambda_i \nabla g_i(\x)$)
+    \item Evaluate function at critical points and compare.
+\end{enumerate}{}
+
+\chapter*{Parameterizations}
+A differential is an instantaneous change in a variable's value. E.g. for $t \in \mathbb{R}$, $dt$ is instantaneous linear change in its value.
+\section*{Physics}
+%Path is regular if $c'(t)\neq 0, ~\forall~ t \in domain(c)$
+Let $c:[a,b]\to \mathbb{R}^n$ smooth enough s.t. derivatives exist,
+\begin{itemize}
+    \item Velocity: $\c'(t)$
+    \item Speed: $||\c'(t)||$
+    \item Acceleration: $\c''(t)$
+    \item Vector displacement: $d\s=[dx_i]dt \in \mathbb{R}^n$
+    \item Scalar displacement: $ds = ||d\s|| \in \mathbb{R}$
+    \item Arclength: $s(t) = \int_{a}^{t}||c'(u)|| du$
+    \item Length w/ c: $L(\c) = \int_{a}^{b}||\c'(t)||dt = \int_{\c} ds$
+    \item Length w/ arclength: $L(\c) = \int_{a}^{b}s'(t)dt = s(b) - s(a)=s(b)$
+\end{itemize}{}
+If $c$ is not c1 at a finite number of points, length can still be computed by breaking interval at nondifferentiable points, and integrate over differentiable intervals.
+
+\section*{Vector fields}
+A vector field is a map $F:U\subset \mathbb{R}^n\to \mathbb{R}^n$. In other words, assigns each $\x\in U$, a vector  $F(\x)$ based at $\x \in \mathbb{R}^n$.
+\subsection*{Conservative}
+$F$ is conservative iff $\exists ~f : \mathbb{R}^n\to\mathbb{R}$ a c1 function, where
+$$F(\x)=\nabla f(\x)$$
+This is because $\nabla f:\mathbb{R}^n\to \mathbb{R}^n$ can be viewed as a vector field, aka a gradient field. Mixed partials must be equal (function can't be discontinuous).
+
+\subsection*{Flow line}
+Curve $\c:\mathbb{R}\to\mathbb{R}^n$ is a flow line of $F$ iff
+$$\forall t \in \mathbb{R},~ \c'(t) = F(\c(t))$$
+In other words, the velocity of a particle on the curve must be same as the vector field at that point.
+
+\subsection*{Del operator}
+View $\nabla$ as a function. $\nabla: (f:\mathbb{R}^n\to \mathbb{R}) \to (F:\mathbb{R}^n\to\mathbb{R}^n)$.
+$$\nabla = \left[\frac{\partial}{\partial\x_1}, \ldots, \frac{\partial}{\partial\x_n}\right]^T$$
+%We can view $D$ in a similar way, a function that maps functions to functions.
+
+\subsection*{Divergence}
+Measures rate of expansion of volume at each point in a vector field. Results in scalar field, since it maps to $\mathbb{R}$.
+    $$div(F) = \nabla \cdot F = \sum_{i=1}^{n}\frac{\partial F_i}{\partial x_i}$$
+    If $=0$ stays same size, if $>0$ expanding, and if $<0$ decreasing in size
+
+\subsection*{Curl}
+Measures sense of rotation. Results in vector field, since it maps to $\mathbb{R}^n$.
+$$curl(F) = \nabla \times F$$
+\subsubsection*{Irrotational}
+Vector field $F$ is irrotational iff
+$$curl(F) = \nabla \times F = 0$$
+\begin{itemize}
+    \item Gradient vector fields have zero curl and are thus  irrotational ($\nabla\times (\nabla f)=0$). Contrapositive, too.
+\end{itemize}{}
+
+\subsection*{Divergence of curl}
+$$div(curl(F)) = \nabla \cdot (\nabla \times F) = 0$$
+\begin{itemize}
+    \item Curl of a vector field has no divergence.
+    \item Nonzero divergence means not a curl field.
+\end{itemize}{}
+
+\section*{Multiple integration}
+\subsection*{Cavalier's principle}
+Take a solid $S\subset \mathbb{R}^n$, volume is the summing of areas of slices along one direction. Then, we can integrate again for the area.
+$$V(S) = \int_{a}^{b}A(x)dx = \int_{a}^{b}\int_{c}^{d}f(x,y)dy dx$$
+\subsection*{Elementary region}
+Domain $D\in\mathbb{R}^2$ is elementary region if either,
+\begin{itemize}
+    \item y-simple: $$D=\{(x,y)\in\mathbb{R}~|~a<x\leq b, \varphi_1(x) \leq y \leq \varphi_2(x)\}$$
+    \item x-simple: $$D=\{(x,y)\in\mathbb{R}~|~c<y\leq d, \phi_1(y) \leq x \leq \phi_2(y)\}$$
+\end{itemize}
+If both true, simple region.
+\subsection*{Fubini's and double integrals}
+If simple region,
+$$\int_{R}f(x,y)dA = \int_{a}^{b}\int_{c}^{d} f(x,y) dy dx = \int_{c}^{d}\int_{a}^{b} f(x,y) dx dy$$
+If y-simple,
+$$\int_{R}f(x,y)dA = \int_{a}^{b}\int_{\varphi_1(x)}^{\varphi_2(x)}f(x,y)dydx$$
+If x-simple,
+$$\int_{R}f(x,y)dA = \int_{c}^{d}\int_{\phi_1(y)}^{\phi_2(y)}f(x,y)dxdy$$
+When swapping from x-simple to y-simple, need to swap bounds as well. Sometimes, might become piecewise.
+%\subsection*{Triple integrals}
+%Similar to double integrals.
+\subsection*{Change of variables}
+\subsubsection*{Map properties}
+Let $T$ be a map $T:D^*\to D$,
+\begin{itemize}
+\item 
+$T$ is one-to-one (injective) iff
+$$T(u_1,v_1) = T(u_2, v_2) \implies u_1=u_2, v_1=v_2$$
+In other words, no two distinct points in domain map to the same point in image.
+
+\item $T$ is onto (surjective) iff $$T(D^*)=D$$
+In other words, for every point in the image, there exist a point in the domain that map to that value.
+\end{itemize}
+Nonsingular linear transformations are bijective (one-to-one and onto). Let $\textrm{A}_{2\times 2}$ be a nonsingular ($det(\textrm{A}    )\neq 0$), and $T:\mathbb{R}^{2}\to \mathbb{R}$, $T(\x) = \textrm{A}\x$.
+\subsubsection*{Nice region to desired region}
+Idea: Able to map a nicer region $D^*$ into the desired region $D$.\\
+Let $D^*, D$ be elementary regions in $\mathbb{R}^2$ and let $T:D^*\to D$ be a c1 transformation which is bijective at least on the interior of $D^*, D$. Then, for $f:D\to \mathbb{R}$,
+$$\iint_{D}f(x,y)dxdy=\iint_{D^*}f(x(u,v), y(u,v))) \Big\vert\frac{\partial(x,y)}{\partial(u,v)}\Big\vert du dv$$
+Where $\Big\vert\frac{\partial(x,y)}{\partial(u,v)}\Big\vert$ is the absolute value of the jacobian determinant (the determinant of the derivative matrix).\\
+E.g. For polar coordinates, $D^*$ is $r,\theta$, and $D$ is $x,y$. Jacobian determinant is $[cos(\theta)*rcos(\theta)] - [\sin(\theta) * -r\sin(\theta)=r$
+
+\subsubsection*{Desired region to nice region}
+Idea: Able to map desired region $D$ into a nicer region $D^*$. Instead of using inverse map, write f in terms of new mapping, and do the inverse Jacobian determinant.
+$$\iint_{D}f(x,y)dxdy=\iint_{D^*}f(x(u,v), y(u,v)) \Big\vert\frac{\partial(x,y)}{\partial(u,v)}\Big\vert^{-1} du dv$$
+
+\section*{Line integrals}
+%Measures how much a bead must fight against a vector field while traversing the curve.
+\subsection*{Scalar line integral}
+Scalar line integral of $f:\mathbb{R}^n\to\mathbb{R}^n$ along $\c:[a,b]\to \mathbb{R}^n$
+$$\int_{\c}f ds = \int_{\c} f(\c(t))||\c'(t)||dt$$
+Where $ds$ is essentially arclength. In other words, area under a curve along the line, like the structure underneath a rollercoaster.
+
+\subsection*{Vector line integral}
+Let F be a c0 vector field defined along a c1 curve $\c:[a,b]\to \mathbb{R}^n$. Then, the vector line interval of F along $\c$ is
+$$\int_{\c}\textrm{F}\cdot d\s=\int_{a}^{b}\textrm{F}(\c(t))\cdot \c'(t) dt$$
+
+\subsection*{Vector line integral is scalar line integral}
+For a c1 path, $\c:[a,b]\to\mathbb{R}^n$, 
+\begin{align*}
+\int_{\c}\textrm{F}\cdot d\s &= \int_{a}^{b}\textrm{F}(\c(t))\cdot \c'(t) dt\\
+&= \int_{a}^{b}\textrm{F}(\c(t))\cdot \frac{\c'(t) }{||c'(t)||} * ||c'(t)|| dt\\
+&= \int_{a}^{b}[\textrm{F}(\c(t))\cdot \textrm{T}(t) ]||c'(t)|| dt\\
+&= \int_{a}^{b}(\textrm{F}\cdot \textrm{T}) d\s
+\end{align*}
+\subsection*{Applying FTC}
+If conservative, then $F = \nabla f$, then you can apply fundamental theorem of calculus
+$$\int_{\c}\textrm{F}\cdot d\s=f(c(b)) - f(c(a))$$
+
+\section*{Reparameterization}
+\subsection*{Line reparameterization}
+Let $h:I\to J$ be a c1-real valued function that is one-to-one on $I=[a,b]\subset \mathbb{R}$ and onto $J=[c,d]$. For $\c:J\to\mathbb{R}^n$ a piecewise c1 curve, the composition $\textrm{p}=\c\circ h:I\to\mathbb{R}^n$ is a reparameterization of $\c$.
+\begin{itemize}
+    \item Orientation preserving: $h(a)=c,~ h(b)=d$
+    \item Orientation reversing: $h(a)=d,~ h(b)=c$
+\end{itemize}
+
+\begin{comment}
+\subsection*{Surface reparametrization}
+Let $\Phi:D\subset \mathbb{R}^2\to \mathbb{R}^n$, $n\geq 3$ be a function. The surface is $S=\Phi(D)$ where
+$$\Phi(u,v) = (x_1(u,v),\ldots, x_n(u,v))$$
+
+\subsubsection*{Surface reparameterization of a plane given 3 points}
+\begin{itemize}
+    \item Points to 2 vectors, find the normal. Then, choose any of the points and plug in normal.
+    $$\textrm{n}=\textrm{u}\times \textrm{v}$$
+    $$0=n_x(x-x_0) + n_y(y-y_0) + n_z(z-z_0)$$
+    \item Point plus linear combination of span of two vectors.
+    $$[x,y,z]^T = \textrm{p}+s\textrm{u}+t\textrm{v}$$
+\end{itemize}
+
+\subsubsection*{Tangent vector of surface reparameterization}
+$$T_u = \frac{\partial \Phi}{\partial u}(u_0, v_0) = \langle\frac{\partial x}{\partial u}(u_0, v_0), \frac{\partial y}{\partial u}(u_0, v_0), \frac{\partial z}{\partial u}(u_0, v_0)\rangle$$
+$$T_v = \frac{\partial \Phi}{\partial v}(u_0, v_0) = \langle\frac{\partial x}{\partial v}(u_0, v_0), \frac{\partial y}{\partial v}(u_0, v_0), \frac{\partial z}{\partial v}(u_0, v_0)\rangle$$
+Again, we can take the dot product to get the tangent plane.
+$$N = T_{u_0} \times T_{v_0},~N \neq 0$$
+$$N_x(x-x_0) + N_y(y-y_0) + N_z(z-z_0)=0$$
+The reason why we test for $N\neq 0$ is to test for smoothness.
+\end{comment}
+
+
+\subsection*{Integral of reparameterization}
+Let F be a c0 vector field and f a c0 function on a domain that contains a piecewise c1 curve $\c:[a,b]\to\mathbb{R}^n$. Let $\textrm{p}:[c,d]\to\mathbb{R}^n$ be any reparameterization. Then,
+$$\int_{\c}f d\s = \int_{\textrm{p}}f d\s$$
+$$\int_{\c}F \cdot d\s = \int_{\textrm{p}}F \cdot d\s \textrm{ if p is orientation preserving}$$
+$$\int_{\c}F \cdot d\s = -\int_{\textrm{p}}F \cdot d\s \textrm{ if p is orientation reversing}$$
+
+
+\section*{Simple, closed, one-to-one, onto}
+\begin{itemize}
+    \item One-to-one - no two points in domain map to the same point in image.
+    $$f(\x_1)=\y, f(\x_2)=\y \implies \x_1 = \x_2$$
+    \item Onto - every point in image is mapped by domain.
+    $$\forall~ \y \in Im(f), \exists~\x \textrm{ s.t. } f(\x)=\y$$
+    \item Simple - $\c:[a,b]\to\mathbb{R}^n$ c0 curve is simple iff does not cross same point in $Im(\c)$ more than once.
+    \item Closed - $\c:[a,b]\to\mathbb{R}^n$ c0 curve is closed iff $\c(a) = \c(b)$.
+    \item Simple and closed - closed, and simple on $[a,b)$.
+\end{itemize}{}
+
+\begin{comment}
+\section*{Surface area}
+Let $T_u, T_v$ be tangents. Surface area is the sum of parallelogram areas.
+$$SA(S) = \iint_{D}||T_u\times T_v||dudv$$
+\subsection*{Surface area reparameterization}
+$$\iint_S f(\x)dS = \iint_D f(\Phi(u,v))||T_u\times T_v|| du dv$$
+If 0, then this means that net integral is 0.
+\subsubsection{Surface orientation}
+If it exists, a surface orientation of $S\in \mathbb{R}^n$ is a choice of unit normal vector at each point of the surface so that the vectors vary continuously. At any point, although there are many options for normal vectors, there are only options for unit vectors (inside versus outside, or above versus below). E.g. a mobius strip doesn't have an orientation.
+
+\section*{Flux (vector surface integral)}
+Measures vector field flow across surface.
+For $F:\mathbb{R}^3\to\mathbb{R}^3$, $S=\Phi(D)$ where $\Phi:D\to\mathbb{R}^3$ a surface with a parameterization.
+$$\iint_{S}F\cdot dS=\iint_{D}F(\Phi(u,v))\cdot (T_u\times T_v)dudv$$
+\end{comment}

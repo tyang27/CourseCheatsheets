@@ -1,0 +1,122 @@
+\documentclass[8pt]{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{esint}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\usepackage[margin=0.5in]{geometry}
+
+\def\x{\textrm{x}}
+\def\y{\textrm{y}}
+\def\u{\textrm{u}}
+\def\v{\textrm{v}}
+\def\c{\textrm{c}}
+\def\f{\textrm{f}}
+\def\F{\textrm{F}}
+\def\s{\textrm{s}}
+\def\S{\textrm{S}}
+\def\h{\textrm{h}}
+
+\title{Calc Final}
+\author{tyang27}
+\date{December 2019}
+
+\begin{document}
+
+\maketitle
+\section*{Equations}
+Graph
+$$\{(\x, y) \in \mathbb{R}^{n+1} ~|~ f(\x)=y\}$$
+Level set
+$$\{(\x) \in \mathbb{R}^{n} ~|~ f(\x)=c\}$$
+Open ball
+$$B_{r}(\Bar{\x}) = \{(\x) ~|~ ((\x-\Bar{\x}) < r)\}$$
+Derivative, gradient
+$$Df(\x) = \nabla f(\x)^T = [\partial f_i / \partial x_j] $$
+Directional derivative
+$$D_\u f = \nabla f \cdot \u$$
+Steepest descent
+$$-\nabla F$$
+Chain rule
+$$D(f\circ g)(\x) = Df(g(\x))Dg(\x)$$
+Taylor
+$$f(\Bar{\x}) \approx f(\Bar{\x}) + \nabla f(\Bar {\x})(\x-\Bar{\x}) + \frac{1}{2}(\x - \Bar{\x})^T\nabla^2f(\Bar{\x})(\x - \Bar{\x})$$
+Lagrange
+$$\nabla f = \sum_i \lambda_i \nabla g_i$$
+$$g_i = 0$$
+Fubinis
+$$\int_{a}^{b}\int_{c}^{d} f(x,y) dy dx = \int_{c}^{d}\int_{a}^{b} f(x,y) dx dy$$
+Simple region
+$$\int_{R}f(x,y)dA = \int_{a}^{b}\int_{\varphi_1(x)}^{\varphi_2(x)}f(x,y)dydx$$
+Cavaliers
+$$V(S) = \int_{a}^{b}A(x)dx = \int_{a}^{b}\int_{c}^{d}f(x,y)dy dx$$
+Change of variables
+$$\iint_{D}f(x,y)dxdy=\iint_{D^*}f(x(u,v), y(u,v))) \Big\vert\frac{\partial(x,y)}{\partial(u,v)}\Big\vert du dv$$
+$$\iint_{D}f(x,y)dxdy=\iint_{D^*}f(x(u,v), y(u,v))) \Big\vert\frac{\partial(x,y)}{\partial(u,v)}\Big\vert^{-1} du dv$$
+Flow line
+$$\forall t \in \mathbb{R},~ \c'(t) = F(\c(t))$$
+Divergence
+$$\nabla \cdot F$$
+Curl
+$$\nabla \times F$$
+Curl field has no divergence
+$$div(curl(F)) = \nabla \cdot (\nabla \times F) = 0$$
+Irrotational
+$$\nabla \times F = 0$$
+Conservative
+$$F=\nabla f$$
+Gradient fields are irrotational
+$$\nabla \times \nabla f = \nabla \times F = 0$$
+Scalar line integral
+$$\int_{\c}f ds = \int_{\c} f(\c(t))||\c'(t)||dt$$
+Vector line integral (work)
+$$\int_{\c}\F\cdot d\s=\int_{a}^{b}\F(\c(t))\cdot \c'(t) dt = \int_{c}(\F\cdot \textrm{T}) ds$$
+$$\int_{\c}\textrm{F}\cdot d\s=f(c(b)) - f(c(a))$$
+Scalar surface integral
+$$\iint_{S}f(x,y,z)dS = \iint_{D}f(\Phi(u,v))||T_u\times T_v|| du dv$$
+Vector surface integral (flux)
+$$\iint_{S}\F(x,y,z)d\S = \iint_{D}\F(\Phi(u,v))\cdot (T_u\times T_v) du dv$$
+Arc length
+$$\int_{\c} ds = \int_{\c} ||\c'(t)||dt$$
+Surface area
+$$\iint_SdS = \iint_{D}||T_u\times T_v||dudv$$
+Green (scalar curl)
+$$\int_{\partial D}\F\cdot d\s = \iint_{D}(\nabla \times \F)\cdot \textrm{k} ~dA$$
+Stokes (curl)
+$$\int_{\partial S} \F\cdot d\s = \iint_{S}(\nabla \times \F)\cdot d\S$$
+Gauss (divergence)
+$$\iint_{\partial D}\F\cdot d\S = \iiint_{D}(\nabla\cdot \F) dV$$
+\section*{Theorems}
+Conservative
+\begin{itemize}
+    \item F is conservative (iff $F=\nabla f$)
+    \item For $c$ a simple closed curve, $\int_{c}F\cdot d\s = 0$
+    \item For any 2 oriented simple curves with the same endpoints, $\int_{c_1} F\cdot d\s= \int_{c_2}F\cdot d\s$
+    \item $\nabla \times F = 0$
+\end{itemize}{}
+Epsilon delta definition of a limit
+$$\lim_{x\to x_0} f(x) = L$$
+$$\forall~ \varepsilon > 0, \exists~ \delta > 0 \textrm{ s.t. } 0<|x - x_0|<\delta \implies |f(x)-L| < \varepsilon$$
+\begin{itemize}
+    \item Choose $\varepsilon > 0$
+    \item Plug in $x_0$
+\end{itemize}{}
+Definition of a derivative
+$$\lim_{h\to 0}\frac{f(\x + h \textrm{e}_i) - f(\x)}{h}$$
+Second derivative test
+\begin{itemize}
+    \item $D > 0$ local min or max
+    \begin{itemize}
+        \item $d^2f/dx^2 < 0$ local max
+        \item $d^2f/dx^2 < 0$ local min
+    \end{itemize}
+    \item $D < 0$ saddle
+    \item $D = 0$ need higher level tests
+\end{itemize}
+
+\end{document}

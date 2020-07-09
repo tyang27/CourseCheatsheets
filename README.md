@@ -13,6 +13,7 @@ Some errors exist, I tend to type these up pretty quickly. Not guaranteed to be 
 * **Computer Graphics**, 601.457; Dr. Kazhdan <--x
 * **Machine Learning**, 601.475; Dr. Arora <--x
 * **Introduction to Optimization**, 553.361; Dr. Fishkind
+* **Cloud Computing**, 691.419; Dr. Ghorbani <--|
 
 ### Arts and Sciences
 * **Biology II**, 020.152; Dr. Pearlman, Dr. Shingles
